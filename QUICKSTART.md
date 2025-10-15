@@ -30,7 +30,8 @@ ollama pull llama3
 ### 3. Install Kai
 
 ```bash
-# Clone or navigate to the Kai directory
+# Clone the repository
+git clone https://github.com/roywalk3r/kai.git
 cd kai
 
 # Run the installation script

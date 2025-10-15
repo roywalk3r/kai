@@ -15,36 +15,54 @@ def print_banner():
     from rich.panel import Panel
     from rich.text import Text
     from rich import box
+    from rich.align import Align
     
-    # ASCII art logo
-    logo = """
-    ██╗  ██╗ █████╗ ██╗
-    ██║ ██╔╝██╔══██╗██║
-    █████╔╝ ███████║██║
-    ██╔═██╗ ██╔══██║██║
-    ██║  ██╗██║  ██║██║
-    ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝
-    """
+    # Enhanced ASCII art logo with gradient effect
+    logo = Text()
+    logo.append("\n    ██╗  ██╗", style="bold bright_cyan")
+    logo.append(" █████╗ ", style="bold cyan")
+    logo.append("██╗\n", style="bold blue")
+    logo.append("    ██║ ██╔╝", style="bold bright_cyan")
+    logo.append("██╔══██╗", style="bold cyan")
+    logo.append("██║\n", style="bold blue")
+    logo.append("    █████╔╝ ", style="bold cyan")
+    logo.append("███████║", style="bold bright_cyan")
+    logo.append("██║\n", style="bold blue")
+    logo.append("    ██╔═██╗ ", style="bold cyan")
+    logo.append("██╔══██║", style="bold blue")
+    logo.append("██║\n", style="bold bright_blue")
+    logo.append("    ██║  ██╗", style="bold blue")
+    logo.append("██║  ██║", style="bold cyan")
+    logo.append("██║\n", style="bold bright_cyan")
+    logo.append("    ╚═╝  ╚═╝", style="dim cyan")
+    logo.append("╚═╝  ╚═╝", style="dim blue")
+    logo.append("╚═╝\n", style="dim bright_blue")
     
-    # Create styled text
-    title = Text()
-    title.append(logo, style="bold cyan")
-    title.append("\n")
-    title.append("AI-Powered Terminal Assistant", style="bold white")
-    title.append("\n\n")
-    title.append("✨ Transform natural language into commands", style="dim")
-    title.append("\n")
-    title.append("🛡️  Multi-layer safety protection", style="dim")
-    title.append("\n")
-    title.append("🎯 Context-aware and intelligent", style="dim")
+    # Create styled content
+    content = Text()
+    content.append(logo)
+    content.append("\n")
+    content.append("    AI-Powered Terminal Assistant", style="bold white")
+    content.append("\n\n")
+    content.append("    ✨ ", style="yellow")
+    content.append("Transform natural language into commands", style="bright_white")
+    content.append("\n")
+    content.append("    🛡️  ", style="green")
+    content.append("Multi-layer safety protection", style="bright_white")
+    content.append("\n")
+    content.append("    🎯 ", style="magenta")
+    content.append("Context-aware and intelligent", style="bright_white")
+    content.append("\n")
+    content.append("    🧠 ", style="blue")
+    content.append("Smart error detection & auto-fix", style="bright_white")
     
-    # Create panel
+    # Create panel with gradient border
     panel = Panel(
-        title,
+        Align.center(content),
         border_style="bright_cyan",
         box=box.DOUBLE,
         padding=(1, 2),
-        subtitle="[dim]Type 'help' to get started | 'exit' to quit[/dim]",
+        subtitle="[dim italic]Type [bold cyan]'help'[/bold cyan] to get started | [bold yellow]'exit'[/bold yellow] to quit[/dim italic]",
         subtitle_align="center"
     )
     
@@ -56,6 +74,8 @@ def print_first_time_welcome():
     from rich.panel import Panel
     from rich.columns import Columns
     from rich.text import Text
+    from rich.progress import Progress, SpinnerColumn, TextColumn
+    from rich.align import Align
     import time
     from datetime import datetime
     
@@ -64,74 +84,102 @@ def print_first_time_welcome():
     if hour < 12:
         greeting = "Good Morning"
         emoji = "🌅"
+        color = "yellow"
     elif hour < 18:
         greeting = "Good Afternoon"
         emoji = "☀️"
+        color = "bright_yellow"
     else:
         greeting = "Good Evening"
         emoji = "🌙"
+        color = "bright_blue"
+    
+    # Greeting with style
+    greeting_text = Text()
+    greeting_text.append(f"{emoji} ", style=color)
+    greeting_text.append(greeting, style=f"bold {color}")
+    greeting_text.append("! Welcome to ", style="bold white")
+    greeting_text.append("Kai", style="bold bright_cyan")
+    greeting_text.append("!", style="bold white")
     
     console.print()
-    console.print(f"[bold bright_cyan]{emoji} {greeting}! Welcome to Kai![/bold bright_cyan]", justify="center")
+    console.print(Align.center(greeting_text))
     console.print()
     
-    # Animated typing effect
+    # Animated typing effect with better visuals
     messages = [
-        ("Initializing AI assistant", "cyan"),
-        ("Loading context engine", "green"),
-        ("Activating safety systems", "yellow"),
-        ("Ready to assist!", "bright_green")
+        ("Initializing AI assistant", "bright_cyan", "🤖"),
+        ("Loading context engine", "bright_green", "⚙️"),
+        ("Activating safety systems", "bright_yellow", "🛡️"),
+        ("Ready to assist!", "bright_magenta", "✨")
     ]
     
-    for msg, color in messages:
-        console.print(f"  [{color}]▸[/{color}] {msg}...", end="")
-        time.sleep(0.2)
+    for msg, color, icon in messages:
+        console.print(f"  [{color}]▸[/{color}] {icon}  {msg}...", end="")
+        time.sleep(0.15)
         console.print(f" [{color}]✓[/{color}]")
     
     console.print()
     
-    # Feature highlights
+    # Feature highlights with better styling
     features = [
         Panel(
-            "[bold cyan]🤖 Natural Language[/bold cyan]\n"
-            "[dim]Just describe what you want:\n"
-            "• list my files\n"
-            "• create a backup\n"
-            "• show disk usage[/dim]",
-            border_style="cyan",
-            padding=(1, 2)
+            "[bold bright_cyan]🤖 Natural Language[/bold bright_cyan]\n\n"
+            "[bright_white]Just describe what you want:[/bright_white]\n"
+            "[cyan]▸[/cyan] [dim]list my files[/dim]\n"
+            "[cyan]▸[/cyan] [dim]create a backup[/dim]\n"
+            "[cyan]▸[/cyan] [dim]show disk usage[/dim]",
+            border_style="bright_cyan",
+            padding=(1, 2),
+            title="[bold]Feature 1[/bold]",
+            title_align="left"
         ),
         Panel(
-            "[bold yellow]🛡️ Safety First[/bold yellow]\n"
-            "[dim]Protected from:\n"
-            "• Dangerous commands\n"
-            "• Accidental deletions\n"
-            "• Long-running tasks[/dim]",
-            border_style="yellow",
-            padding=(1, 2)
+            "[bold bright_yellow]🛡️ Safety First[/bold bright_yellow]\n\n"
+            "[bright_white]Protected from:[/bright_white]\n"
+            "[yellow]▸[/yellow] [dim]Dangerous commands[/dim]\n"
+            "[yellow]▸[/yellow] [dim]Accidental deletions[/dim]\n"
+            "[yellow]▸[/yellow] [dim]Long-running tasks[/dim]",
+            border_style="bright_yellow",
+            padding=(1, 2),
+            title="[bold]Feature 2[/bold]",
+            title_align="left"
         ),
         Panel(
-            "[bold green]⚡ Smart Features[/bold green]\n"
-            "[dim]Includes:\n"
-            "• Command history\n"
-            "• Dry-run mode\n"
-            "• Auto-suggestions[/dim]",
-            border_style="green",
-            padding=(1, 2)
+            "[bold bright_green]⚡ Smart Features[/bold bright_green]\n\n"
+            "[bright_white]Includes:[/bright_white]\n"
+            "[green]▸[/green] [dim]Auto error fixing[/dim]\n"
+            "[green]▸[/green] [dim]Command history[/dim]\n"
+            "[green]▸[/green] [dim]Dry-run mode[/dim]",
+            border_style="bright_green",
+            padding=(1, 2),
+            title="[bold]Feature 3[/bold]",
+            title_align="left"
         )
     ]
     
     console.print(Columns(features, equal=True, expand=True))
     console.print()
     
-    # Quick start tips
+    # Quick start tips with better formatting
+    tips_content = Text()
+    tips_content.append("Quick Start Commands:\n\n", style="bold bright_white")
+    tips_content.append("  help", style="bold cyan")
+    tips_content.append("          → Show all commands\n", style="dim")
+    tips_content.append("  examples", style="bold cyan")
+    tips_content.append("      → See command examples\n", style="dim")
+    tips_content.append("  dry-run on", style="bold cyan")
+    tips_content.append("    → Preview before running\n", style="dim")
+    tips_content.append("  history", style="bold cyan")
+    tips_content.append("       → View command history\n\n", style="dim")
+    tips_content.append("💡 ", style="yellow")
+    tips_content.append("Try: ", style="dim italic")
+    tips_content.append("'list my files'", style="bright_cyan italic")
+    tips_content.append(" or ", style="dim italic")
+    tips_content.append("'show system info'", style="bright_cyan italic")
+    
     tips_panel = Panel(
-        "[bold white]Quick Start Tips:[/bold white]\n\n"
-        "[cyan]help[/cyan]          - Show all commands\n"
-        "[cyan]examples[/cyan]      - See command examples\n"
-        "[cyan]dry-run on[/cyan]    - Preview commands before running\n"
-        "[cyan]history[/cyan]       - View your command history\n\n"
-        "[dim italic]Try: 'list my files' or 'show system info'[/dim italic]",
+        tips_content,
         title="[bold bright_cyan]🚀 Get Started[/bold bright_cyan]",
         border_style="bright_cyan",
         padding=(1, 2)
@@ -216,9 +264,63 @@ def print_panel(content: str, title: Optional[str] = None, style: str = "cyan"):
     """Print content in a panel."""
     console.print(Panel(content, title=title, border_style=style))
 
-def confirm(message: str, default: bool = False) -> bool:
+def confirm(message: str, default: bool = True) -> bool:
     """Ask for user confirmation."""
     return Confirm.ask(message, default=default)
+
+def print_ai_response(message: str):
+    """Print AI response with beautiful styling."""
+    from rich.panel import Panel
+    from rich.markdown import Markdown
+    from rich.text import Text
+    
+    # Check if it's a simple message or needs markdown
+    if len(message) < 200 and '\n' not in message:
+        # Short response - use simple panel
+        response_text = Text()
+        response_text.append("💬 ", style="bright_cyan")
+        response_text.append(message, style="bright_white")
+        
+        panel = Panel(
+            response_text,
+            border_style="bright_cyan",
+            padding=(1, 2),
+            title="[bold bright_cyan]Kai[/bold bright_cyan]",
+            title_align="left"
+        )
+        console.print(panel)
+    else:
+        # Long response - use markdown
+        panel = Panel(
+            Markdown(message),
+            border_style="bright_cyan",
+            padding=(1, 2),
+            title="[bold bright_cyan]💬 Kai[/bold bright_cyan]",
+            title_align="left"
+        )
+        console.print(panel)
+    console.print()
+
+def print_command_suggestion(command: str, explanation: str = None):
+    """Print a command suggestion with styling."""
+    from rich.panel import Panel
+    from rich.syntax import Syntax
+    
+    content = ""
+    if explanation:
+        content = f"[bright_white]{explanation}[/bright_white]\n\n"
+    
+    content += f"[bold bright_green]Command:[/bold bright_green]\n[bright_cyan]{command}[/bright_cyan]"
+    
+    panel = Panel(
+        content,
+        border_style="bright_green",
+        padding=(1, 2),
+        title="[bold bright_green]🎯 Suggested Command[/bold bright_green]",
+        title_align="left"
+    )
+    console.print(panel)
+    console.print()
 
 def prompt(message: str, default: str = "") -> str:
     """Prompt user for input."""
@@ -226,6 +328,10 @@ def prompt(message: str, default: str = "") -> str:
         return Prompt.ask(message, default=default)
     return Prompt.ask(message)
 
+def print_code_diff(diff: str):
+    """Print code diff with syntax highlighting."""
+    from rich.syntax import Syntax
+    syntax = Syntax(diff, "diff", theme="monokai", line_numbers=False)
 def print_table(headers: list, rows: list, title: Optional[str] = None):
     """Print a formatted table."""
     table = Table(title=title)

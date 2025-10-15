@@ -13,7 +13,9 @@ DEFAULT_CONFIG = {
     "color_scheme": "default",
     "dry_run": False,
     "log_level": "INFO",
-    "ollama_host": "http://localhost:11434"
+    "ollama_host": "http://localhost:11434",
+    "use_gemini": True,
+    "gemini_model": "gemini-2.0-flash-exp"
 }
 
 class Config:

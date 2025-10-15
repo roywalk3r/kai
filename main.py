@@ -17,7 +17,8 @@ from core.config import get_config
 from core.history import get_history
 from utils.ui import (
     print_banner, print_help, print_error, print_warning,
-    print_info, print_success, confirm, console, print_first_time_welcome
+    print_info, print_success, confirm, console, print_first_time_welcome,
+    print_ai_response
 )
 from utils.safety import SafetyLevel
 from utils.suggestions import format_suggestions_help
@@ -132,7 +133,14 @@ def main():
     kai_dir = Path.home() / ".kai"
     kai_dir.mkdir(exist_ok=True)
     
+    # Create custom prompt with style
+    from prompt_toolkit.formatted_text import HTML
+    
+    def get_prompt():
+        return HTML('<ansibrightcyan><b>kai</b></ansibrightcyan> <ansiyellow>❯</ansiyellow> ')
+    
     session = PromptSession(
+        message=get_prompt,
         history=FileHistory(str(kai_dir / "prompt_history")),
         auto_suggest=AutoSuggestFromHistory(),
     )
@@ -143,6 +151,14 @@ def main():
     # Show enhanced welcome screen every time
     print_first_time_welcome()
     
+    # Show AI model status
+    from ai.gemini_model import is_gemini_available
+    if is_gemini_available():
+        print_info("🤖 Using Gemini AI (Google)")
+    else:
+        print_info("🤖 Using Ollama (Local AI)")
+        print_warning("💡 Tip: Set GEMINI_API_KEY environment variable to use Gemini")
+    
     # Check if dry-run mode is enabled
     if config.get("dry_run", False):
         print_warning("Dry-run mode is enabled")
@@ -150,8 +166,8 @@ def main():
     # Main loop
     while True:
         try:
-            # Get user input
-            query = session.prompt("> ").strip()
+            # Get user input with styled prompt
+            query = session.prompt().strip()
             
             if not query:
                 continue
@@ -169,7 +185,7 @@ def main():
                 continue
             
             elif response["intent"] == "explain":
-                console.print(response["message"])
+                print_ai_response(response["message"])
                 continue
             
             elif response["intent"] == "run":
@@ -177,23 +193,53 @@ def main():
                 warning = response.get("warning")
                 safety_level = response.get("safety_level", SafetyLevel.SAFE)
                 
+                # Check if command is interactive (vim, nano, etc.)
+                from utils.safety import is_interactive_command
+                is_interactive = is_interactive_command(command)
+                
                 # Show warning if present
                 if warning:
-                    print_warning(warning)
+                    from rich.panel import Panel
                     
-                    # For dangerous commands, require explicit confirmation
+                    # Style warning based on safety level
                     if safety_level == SafetyLevel.DANGEROUS:
-                        if not confirm("Are you SURE you want to run this?", default=False):
+                        warning_panel = Panel(
+                            f"[bold red]⚠️  DANGER![/bold red]\n\n"
+                            f"[bright_white]{warning}[/bright_white]\n\n"
+                            f"[dim]This command could be destructive![/dim]",
+                            border_style="red",
+                            title="[bold red]⚠️  Warning[/bold red]",
+                            title_align="left",
+                            padding=(1, 2)
+                        )
+                        console.print(warning_panel)
+                        
+                        if not confirm("[bold red]Are you SURE you want to run this?[/bold red]", default=False):
                             print_info("Command cancelled")
                             continue
                     else:
-                        if not confirm("Proceed?", default=True):
+                        warning_panel = Panel(
+                            f"[bright_white]{warning}[/bright_white]",
+                            border_style="yellow",
+                            title="[bold yellow]⚠️  Warning[/bold yellow]",
+                            title_align="left",
+                            padding=(1, 2)
+                        )
+                        console.print(warning_panel)
+                        
+                        if not confirm("[yellow]Proceed?[/yellow]", default=True):
                             print_info("Command cancelled")
                             continue
                 
                 # Execute command
                 dry_run = config.get("dry_run", False)
-                success, output = execute_command(command, dry_run=dry_run)
+                
+                # If interactive, inform user and run without capture
+                if is_interactive and not dry_run:
+                    print_info("Running interactive command...")
+                    success, output = execute_command(command, dry_run=dry_run, interactive=True)
+                else:
+                    success, output = execute_command(command, dry_run=dry_run, interactive=False)
                 
                 # Add to history and conversation context
                 if not dry_run:

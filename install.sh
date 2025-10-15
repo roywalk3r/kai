@@ -54,15 +54,117 @@ echo "Installing dependencies..."
 .venv/bin/pip install --upgrade pip
 .venv/bin/pip install -r requirements.txt
 
+# Setup AI Model
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo """
+   ██╗  ██╗ █████╗ ██╗
+    ██║ ██╔╝██╔══██╗██║
+    █████╔╝ ███████║██║
+    ██╔═██╗ ██╔══██║██║
+    ██║  ██╗██║  ██║██║
+    ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝ 🤖 AI Model Setup
+"""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+echo "Kai supports two AI models:"
+echo "  1. Gemini (Google) - Fast, accurate, cloud-based (Recommended)"
+echo "  2. Ollama - Local, private, offline"
+echo ""
+
+# Check if Gemini API key already exists
+if [ -n "$GEMINI_API_KEY" ]; then
+    echo "✓ Gemini API key already set"
+    echo "  Kai will use Gemini AI (Google)"
+else
+    echo "Would you like to use Gemini AI? (Recommended)"
+    read -p "Enter your choice [Y/n]: " use_gemini
+    
+    if [[ ! $use_gemini =~ ^[Nn]$ ]]; then
+        echo ""
+        echo "Great! Let's set up Gemini."
+        echo ""
+        echo "📝 Get your free API key:"
+        echo "   1. Visit: https://aistudio.google.com/apikey"
+        echo "   2. Sign in with Google"
+        echo "   3. Click 'Create API Key'"
+        echo "   4. Copy the key (starts with AIza...)"
+        echo ""
+        read -p "Enter your Gemini API key (or press Enter to skip): " api_key
+        
+        if [ -n "$api_key" ]; then
+            # Add to shell config
+            SHELL_CONFIG=""
+            if [ -f "$HOME/.bashrc" ]; then
+                SHELL_CONFIG="$HOME/.bashrc"
+            elif [ -f "$HOME/.zshrc" ]; then
+                SHELL_CONFIG="$HOME/.zshrc"
+            fi
+            
+            if [ -n "$SHELL_CONFIG" ]; then
+                echo "" >> "$SHELL_CONFIG"
+                echo "# Kai - Gemini API Key" >> "$SHELL_CONFIG"
+                echo "export GEMINI_API_KEY=\"$api_key\"" >> "$SHELL_CONFIG"
+                
+                # Also set for current session
+                export GEMINI_API_KEY="$api_key"
+                
+                echo ""
+                echo "✅ Gemini API key saved to $SHELL_CONFIG"
+                echo "   Kai will use Gemini AI (Google)"
+            else
+                echo ""
+                echo "⚠️  Could not find shell config file"
+                echo "   Please manually add to your shell config:"
+                echo "   export GEMINI_API_KEY=\"$api_key\""
+            fi
+        else
+            echo ""
+            echo "ℹ️  Skipping Gemini setup"
+            echo "   Kai will use Ollama (local AI) by default"
+            echo ""
+            echo "   To use Gemini later:"
+            echo "   1. Get API key: https://aistudio.google.com/apikey"
+            echo "   2. export GEMINI_API_KEY=\"your-key-here\""
+            echo "   3. Restart Kai"
+        fi
+    else
+        echo ""
+        echo "ℹ️  Using Ollama (local AI)"
+        echo "   Make sure Ollama is installed and llama3 model is pulled"
+        echo ""
+        echo "   To use Gemini later, set GEMINI_API_KEY environment variable"
+    fi
+fi
+
 # Create .kai directory
 mkdir -p ~/.kai
 
 echo ""
 echo "✅ Installation complete!"
 echo ""
+
+# Check if API key was just added
+if grep -q "# Kai - Gemini API Key" "$HOME/.bashrc" 2>/dev/null || grep -q "# Kai - Gemini API Key" "$HOME/.zshrc" 2>/dev/null; then
+    echo "⚠️  IMPORTANT: Reload your shell configuration to activate Gemini:"
+    if [ -f "$HOME/.bashrc" ]; then
+        echo "  source ~/.bashrc"
+    elif [ -f "$HOME/.zshrc" ]; then
+        echo "  source ~/.zshrc"
+    fi
+    echo ""
+    echo "Or open a new terminal window."
+    echo ""
+fi
+
 echo "To start Kai, run:"
+echo ""
+echo "Option 1 (Easiest - auto-loads API key):"
+echo "  ./start.sh"
+echo ""
+echo "Option 2 (Manual):"
 echo "  source .venv/bin/activate"
 echo "  python main.py"
 echo ""
 echo "Or add an alias to your shell config:"
-echo "  alias kai='cd $(pwd) && source .venv/bin/activate && python main.py'"
+echo "  alias kai='$(pwd)/start.sh'"

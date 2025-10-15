@@ -2,6 +2,7 @@ import subprocess
 import re
 from typing import Dict, Optional
 from ai.context import get_system_context, get_conversation_context
+from ai.gemini_model import ask_gemini, is_gemini_available
 from utils.safety import check_command_safety, is_interactive_command, sanitize_command, SafetyLevel
 from core.config import get_config
 
@@ -84,45 +85,50 @@ You: The 'ls' command lists directory contents. Use 'ls -la' to see all files wi
 REMEMBER: If user says "add", "append", "write", "create", "delete", "remove", "replace", "change" - they want ACTION, so respond with RUN:<command>!
 """
 
-    model = config.get("default_model", "llama3")
-    cmd = ["ollama", "run", model, f"{system_prompt}\n\nUser: {prompt}"]
+    # Try Gemini first
+    use_gemini = config.get("use_gemini", True)
+    output = None
+    
+    if use_gemini and is_gemini_available():
+        output = ask_gemini(prompt, system_prompt)
+        if output:
+            # Successfully got response from Gemini
+            pass
+    
+    # Fallback to Ollama if Gemini not available or failed
+    if output is None:
+        model = config.get("default_model", "llama3")
+        cmd = ["ollama", "run", model, f"{system_prompt}\n\nUser: {prompt}"]
 
-    try:
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
-        output = result.stdout.strip()
-        
-        if result.returncode != 0:
+        try:
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+            output = result.stdout.strip()
+            
+            if result.returncode != 0:
+                return {
+                    "intent": "error",
+                    "message": f"AI model error: {result.stderr or 'Unknown error'}"
+                }
+        except subprocess.TimeoutExpired:
             return {
                 "intent": "error",
-                "message": f"AI model error: {result.stderr or 'Unknown error'}"
+                "message": "AI request timed out. Please try again."
             }
-    except subprocess.TimeoutExpired:
-        return {
-            "intent": "error",
-            "message": "AI request timed out. Please try again."
-        }
-    except FileNotFoundError:
-        return {
-            "intent": "error",
-            "message": "Ollama not found. Please install Ollama and the llama3 model."
-        }
-    except Exception as e:
-        return {
-            "intent": "error",
-            "message": f"Error communicating with AI: {str(e)}"
-        }
+        except FileNotFoundError:
+            return {
+                "intent": "error",
+                "message": "No AI model available. Please set GEMINI_API_KEY or install Ollama."
+            }
+        except Exception as e:
+            return {
+                "intent": "error",
+                "message": f"Error communicating with AI: {str(e)}"
+            }
 
     # Parse response
     match = re.search(r'RUN:\s*(.+?)(?:\n|$)', output, re.IGNORECASE)
     if match:
         command = sanitize_command(match.group(1))
-        
-        # Check if command is interactive
-        if is_interactive_command(command):
-            return {
-                "intent": "explain",
-                "message": f"Cannot run interactive command '{command}'. Please use a non-interactive alternative."
-            }
         
         # Check command safety
         safety_level, warning = check_command_safety(command)

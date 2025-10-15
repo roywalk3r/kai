@@ -19,13 +19,15 @@ Kai is an AI-powered terminal assistant that translates natural language into sh
 ### Prerequisites
 
 - Python 3.8+
-- [Ollama](https://ollama.ai/) with llama3 model installed
+- **Either:**
+  - **Google Gemini API Key** (Recommended - Free, Fast) - [Get it here](https://aistudio.google.com/apikey)
+  - **OR** [Ollama](https://ollama.ai/) with llama3 model (Local, Private)
 
 ### Setup
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/roywalk3r/kai.git
 cd kai
 ```
 
@@ -40,11 +42,21 @@ source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-4. Install Ollama and pull the llama3 model:
-```bash
-# Install Ollama from https://ollama.ai/
-ollama pull llama3
-```
+4. **Choose your AI model:**
+
+   **Option A: Gemini (Recommended)**
+   ```bash
+   # Get API key from https://aistudio.google.com/apikey
+   export GEMINI_API_KEY="your-api-key-here"
+   ```
+
+   **Option B: Ollama (Local)**
+   ```bash
+   # Install Ollama from https://ollama.ai/
+   ollama pull llama3
+   ```
+
+   See [GEMINI_SETUP.md](GEMINI_SETUP.md) for detailed setup instructions.
 
 ## Usage
 
@@ -139,6 +151,8 @@ kai/
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+
+Repository: https://github.com/roywalk3r/kai
 
 ## License
 
