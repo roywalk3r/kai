@@ -5,6 +5,7 @@ Main entry point for the application.
 """
 
 import sys
+import argparse
 from prompt_toolkit import PromptSession
 from prompt_toolkit.history import FileHistory
 from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
@@ -261,9 +262,245 @@ def main():
             print_error(f"Unexpected error: {str(e)}")
             continue
 
+def handle_subcommand(subcommand: str, args: list):
+    """Handle subcommands like update, uninstall, config, etc."""
+    import subprocess
+    import os
+    from rich.panel import Panel
+    
+    if subcommand == "update":
+        console.print(Panel(
+            "[bold bright_cyan]Updating Kai...[/bold bright_cyan]",
+            border_style="bright_cyan"
+        ))
+        
+        # Determine installation directory
+        script_dir = Path(__file__).parent.absolute()
+        
+        try:
+            # Git pull
+            result = subprocess.run(
+                ["git", "pull"],
+                cwd=script_dir,
+                capture_output=True,
+                text=True
+            )
+            
+            if result.returncode == 0:
+                console.print("[green]✓ Updated from git[/green]")
+                console.print(result.stdout)
+                
+                # Update dependencies
+                console.print("\n[cyan]Updating dependencies...[/cyan]")
+                venv_pip = script_dir / ".venv" / "bin" / "pip"
+                subprocess.run(
+                    [str(venv_pip), "install", "-r", "requirements.txt", "--upgrade"],
+                    cwd=script_dir
+                )
+                console.print("[green]✓ Dependencies updated[/green]")
+                console.print("\n[bold green]✅ Kai updated successfully![/bold green]")
+            else:
+                console.print(f"[red]❌ Update failed: {result.stderr}[/red]")
+        except Exception as e:
+            console.print(f"[red]❌ Error: {e}[/red]")
+    
+    elif subcommand == "uninstall":
+        console.print(Panel(
+            "[bold red]⚠️  Uninstalling Kai[/bold red]\n\n"
+            "[bright_white]This will remove Kai from your system.[/bright_white]\n"
+            "[dim]Your configuration in ~/.kai will be preserved.[/dim]",
+            border_style="red",
+            title="[bold red]Uninstall[/bold red]"
+        ))
+        
+        if not confirm("[red]Are you sure?[/red]", default=False):
+            console.print("[yellow]Uninstall cancelled[/yellow]")
+            return
+        
+        script_dir = Path(__file__).parent.absolute()
+        uninstall_script = script_dir / "uninstall.sh"
+        
+        if uninstall_script.exists():
+            os.system(f"bash {uninstall_script}")
+        else:
+            console.print("[red]❌ Uninstall script not found[/red]")
+    
+    elif subcommand == "config":
+        if args and args[0] == "edit":
+            # Open config in editor
+            config_file = Path.home() / ".kai" / "config.json"
+            editor = os.environ.get("EDITOR", "nano")
+            os.system(f"{editor} {config_file}")
+        elif args and args[0] == "reset":
+            # Reset config to defaults
+            if confirm("[yellow]Reset configuration to defaults?[/yellow]", default=False):
+                config = get_config()
+                config.config = config.DEFAULT_CONFIG.copy()
+                config.save()
+                console.print("[green]✓ Configuration reset[/green]")
+        elif args and args[0] == "show":
+            # Show config
+            config = get_config()
+            from rich.table import Table
+            table = Table(title="Kai Configuration", border_style="cyan")
+            table.add_column("Setting", style="cyan")
+            table.add_column("Value", style="bright_white")
+            for key, value in config.config.items():
+                table.add_row(key, str(value))
+            console.print(table)
+        else:
+            # Show config location
+            config_file = Path.home() / ".kai" / "config.json"
+            console.print(Panel(
+                f"[bold bright_white]Configuration File:[/bold bright_white]\n"
+                f"[bright_cyan]{config_file}[/bright_cyan]\n\n"
+                f"[bold]Commands:[/bold]\n"
+                f"[cyan]kai config show[/cyan]   - Show current config\n"
+                f"[cyan]kai config edit[/cyan]   - Edit config file\n"
+                f"[cyan]kai config reset[/cyan]  - Reset to defaults",
+                border_style="bright_cyan",
+                title="[bold bright_cyan]Configuration[/bold bright_cyan]"
+            ))
+    
+    elif subcommand == "history":
+        if args and args[0] == "clear":
+            if confirm("[yellow]Clear command history?[/yellow]", default=False):
+                history = get_history()
+                history.history = []
+                history.save()
+                console.print("[green]✓ History cleared[/green]")
+        elif args and args[0] == "export":
+            # Export history to file
+            filename = args[1] if len(args) > 1 else "kai_history.json"
+            history = get_history()
+            import json
+            with open(filename, 'w') as f:
+                json.dump(history.history, f, indent=2)
+            console.print(f"[green]✓ History exported to {filename}[/green]")
+        else:
+            # Show history
+            history = get_history()
+            from rich.table import Table
+            table = Table(title="Command History", border_style="cyan")
+            table.add_column("#", style="dim")
+            table.add_column("Query", style="bright_white")
+            table.add_column("Command", style="cyan")
+            table.add_column("Success", style="green")
+            
+            for i, entry in enumerate(history.history[-20:], 1):
+                table.add_row(
+                    str(i),
+                    entry.get("query", "")[:50],
+                    entry.get("command", "")[:50],
+                    "✓" if entry.get("success") else "✗"
+                )
+            console.print(table)
+    
+    elif subcommand == "info":
+        # Show system info
+        from rich.table import Table
+        import platform
+        
+        table = Table(title="Kai System Information", border_style="bright_cyan")
+        table.add_column("Property", style="cyan")
+        table.add_column("Value", style="bright_white")
+        
+        script_dir = Path(__file__).parent.absolute()
+        table.add_row("Version", "1.0.0")
+        table.add_row("Install Location", str(script_dir))
+        table.add_row("Config Directory", str(Path.home() / ".kai"))
+        table.add_row("Python Version", platform.python_version())
+        table.add_row("Platform", platform.platform())
+        
+        # Check AI model
+        from ai.gemini_model import is_gemini_available
+        if is_gemini_available():
+            table.add_row("AI Model", "Gemini (Google)")
+        else:
+            table.add_row("AI Model", "Ollama (Local)")
+        
+        console.print(table)
+    
+    else:
+        console.print(f"[red]Unknown subcommand: {subcommand}[/red]")
+        console.print("Run [cyan]kai --help[/cyan] for available commands")
+
 if __name__ == "__main__":
+    # Parse command-line arguments
+    parser = argparse.ArgumentParser(
+        description="Kai - AI-Powered Terminal Assistant",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Subcommands:
+  kai update             Update Kai to the latest version
+  kai uninstall          Uninstall Kai from the system
+  kai config [show|edit|reset]  Manage configuration
+  kai history [clear|export]    Manage command history
+  kai info               Show system information
+
+Examples:
+  kai                    Start interactive mode
+  kai update             Update to latest version
+  kai config show        Show current configuration
+  kai history clear      Clear command history
+  kai --version          Show version information
+
+For more information, visit: https://github.com/roywalk3r/kai
+        """
+    )
+    parser.add_argument(
+        'subcommand',
+        nargs='?',
+        help='Subcommand to execute (update, uninstall, config, history, info)'
+    )
+    parser.add_argument(
+        'args',
+        nargs='*',
+        help='Additional arguments for subcommand'
+    )
+    parser.add_argument(
+        '--version', '-v',
+        action='version',
+        version='Kai Terminal Assistant v1.0.0'
+    )
+    parser.add_argument(
+        '--dry-run',
+        action='store_true',
+        help='Enable dry-run mode (preview commands without executing)'
+    )
+    parser.add_argument(
+        '--no-banner',
+        action='store_true',
+        help='Skip the welcome banner'
+    )
+    
+    args = parser.parse_args()
+    
+    # Handle subcommands
+    if args.subcommand:
+        handle_subcommand(args.subcommand, args.args)
+        sys.exit(0)
+    
+    # Set dry-run mode if specified
+    if args.dry_run:
+        config = get_config()
+        config.set('dry_run', True)
+        config.save()
+    
     try:
-        main()
+        # Skip banner if requested
+        if args.no_banner:
+            # Temporarily disable banner
+            import utils.ui
+            original_banner = utils.ui.print_banner
+            original_welcome = utils.ui.print_first_time_welcome
+            utils.ui.print_banner = lambda: None
+            utils.ui.print_first_time_welcome = lambda: None
+            main()
+            utils.ui.print_banner = original_banner
+            utils.ui.print_first_time_welcome = original_welcome
+        else:
+            main()
     except KeyboardInterrupt:
         console.print("\n[yellow]Goodbye! 👋[/yellow]")
         sys.exit(0)
