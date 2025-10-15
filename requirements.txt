@@ -1,4 +1,12 @@
+# Core UI and Terminal
 rich>=13.7.0
 prompt-toolkit>=3.0.43
+
+# Configuration
 pyyaml>=6.0.1
+
+# AI Models
 google-genai>=0.2.0
+
+# Note: Ollama is optional and installed separately
+# Visit: https://ollama.ai for installation instructions
