@@ -519,7 +519,37 @@ def handle_subcommand(subcommand: str, args: list):
         # Determine installation directory
         script_dir = Path(__file__).parent.absolute()
         
+        # Check if we're in a system installation (requires sudo)
+        is_system_install = str(script_dir).startswith('/opt/') or str(script_dir).startswith('/usr/')
+        
         try:
+            # Check if directory is writable
+            if not os.access(script_dir, os.W_OK):
+                if is_system_install:
+                    console.print("[yellow]⚠️  System installation detected. Requires sudo privileges.[/yellow]")
+                    console.print("\n[bright_white]Run with sudo:[/bright_white]")
+                    console.print(f"  [cyan]sudo {script_dir}/main.py update[/cyan]")
+                    console.print("\n[dim]Or reinstall to user directory for automatic updates.[/dim]")
+                    return
+                else:
+                    console.print("[red]❌ No write permission to installation directory[/red]")
+                    return
+            
+            # Fix git ownership issue if present
+            git_config_result = subprocess.run(
+                ["git", "config", "--global", "--get", "safe.directory"],
+                cwd=script_dir,
+                capture_output=True,
+                text=True
+            )
+            
+            if str(script_dir) not in git_config_result.stdout:
+                console.print("[dim]Configuring git safe directory...[/dim]")
+                subprocess.run(
+                    ["git", "config", "--global", "--add", "safe.directory", str(script_dir)],
+                    capture_output=True
+                )
+            
             # Git pull
             result = subprocess.run(
                 ["git", "pull"],
@@ -530,19 +560,34 @@ def handle_subcommand(subcommand: str, args: list):
             
             if result.returncode == 0:
                 console.print("[green]✓ Updated from git[/green]")
-                console.print(result.stdout)
+                if result.stdout.strip() and "Already up to date" not in result.stdout:
+                    console.print(result.stdout)
+                elif "Already up to date" in result.stdout:
+                    console.print("[dim]Already up to date[/dim]")
                 
                 # Update dependencies
                 console.print("\n[cyan]Updating dependencies...[/cyan]")
                 venv_pip = script_dir / ".venv" / "bin" / "pip"
-                subprocess.run(
-                    [str(venv_pip), "install", "-r", "requirements.txt", "--upgrade"],
-                    cwd=script_dir
-                )
-                console.print("[green]✓ Dependencies updated[/green]")
+                if venv_pip.exists():
+                    pip_result = subprocess.run(
+                        [str(venv_pip), "install", "-r", "requirements.txt", "--upgrade", "-q"],
+                        cwd=script_dir,
+                        capture_output=True,
+                        text=True
+                    )
+                    if pip_result.returncode == 0:
+                        console.print("[green]✓ Dependencies updated[/green]")
+                    else:
+                        console.print(f"[yellow]⚠️  Dependency update had issues: {pip_result.stderr}[/yellow]")
+                else:
+                    console.print("[yellow]⚠️  Virtual environment not found, skipping dependency update[/yellow]")
+                
                 console.print("\n[bold green]✅ Prometheus updated successfully![/bold green]")
             else:
                 console.print(f"[red]❌ Update failed: {result.stderr}[/red]")
+                if "dubious ownership" in result.stderr:
+                    console.print("\n[yellow]Try running with sudo:[/yellow]")
+                    console.print(f"  [cyan]sudo {script_dir}/main.py update[/cyan]")
         except Exception as e:
             console.print(f"[red]❌ Error: {e}[/red]")
     
