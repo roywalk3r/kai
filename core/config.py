@@ -6,7 +6,9 @@ from pathlib import Path
 from typing import Any, Dict
 
 DEFAULT_CONFIG = {
-    "timeout_seconds": 20,
+    "timeout_seconds": 300,  # Default timeout (5 minutes)
+    "short_timeout": 30,     # For quick commands
+    "long_timeout": 1800,    # For long operations (30 minutes)
     "default_model": "llama3",
     "auto_confirm_safe": False,
     "history_size": 100,

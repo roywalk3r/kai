@@ -42,10 +42,23 @@ def execute_command(cmd: str, dry_run: bool = False, interactive: bool = False) 
     """
     global current_process, process_timer
     
-    # Enhanced command display
+    # Determine appropriate timeout based on command
+    from utils.command_classifier import classify_command_timeout, format_timeout_message
+    classification, timeout_seconds = classify_command_timeout(cmd)
+    
+    # Enhanced command display with timeout info
     from rich.panel import Panel
+    from rich.text import Text
+    
+    cmd_display = Text()
+    cmd_display.append(f"{cmd}\n", style="bold bright_white")
+    
+    # Add timeout info for long commands
+    if classification == 'long':
+        cmd_display.append(f"\n⏱️  Timeout: {format_timeout_message(timeout_seconds)}", style="dim yellow")
+    
     console.print(Panel(
-        f"[bold bright_white]{cmd}[/bold bright_white]",
+        cmd_display,
         border_style="bright_green",
         padding=(0, 1),
         title="[bold bright_green]⚡ Executing[/bold bright_green]",
@@ -57,7 +70,6 @@ def execute_command(cmd: str, dry_run: bool = False, interactive: bool = False) 
         return True, None
     
     config = get_config()
-    timeout_seconds = config.get("timeout_seconds", 20)
     output_lines = []
     stderr_output = ""
 

@@ -142,20 +142,26 @@ else
         echo "Great! Let's set up Gemini."
         echo ""
         echo "📝 Get your free API key:"
-        echo "   1. Visit: https://aistudio.google.com/apikey"
         echo "   2. Sign in with Google"
         echo "   3. Click 'Create API Key'"
         echo "   4. Copy the key (starts with AIza...)"
         echo ""
         read -p "Enter your Gemini API key (or press Enter to skip): " api_key
-        
-        if [ -n "$api_key" ]; then
-            # Determine which shell config to use
+                if [ -n "$api_key" ]; then
+            # Determine which shell config to use based on current shell
             SHELL_CONFIG=""
-            if [ -f "$HOME/.bashrc" ]; then
+            CURRENT_SHELL=$(basename "$SHELL")
+            
+            if [ "$CURRENT_SHELL" = "zsh" ] && [ -f "$HOME/.zshrc" ]; then
+                SHELL_CONFIG="$HOME/.zshrc"
+            elif [ "$CURRENT_SHELL" = "bash" ] && [ -f "$HOME/.bashrc" ]; then
                 SHELL_CONFIG="$HOME/.bashrc"
             elif [ -f "$HOME/.zshrc" ]; then
                 SHELL_CONFIG="$HOME/.zshrc"
+            elif [ -f "$HOME/.bashrc" ]; then
+                SHELL_CONFIG="$HOME/.bashrc"
+            elif [ -f "$HOME/.profile" ]; then
+                SHELL_CONFIG="$HOME/.profile"
             fi
             
             if [ -n "$SHELL_CONFIG" ]; then
