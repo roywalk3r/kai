@@ -18,8 +18,8 @@ def sanitize_apt_command(command: str) -> str:
     """
     # Replace standalone apt with apt-get
     # Match 'apt' as a whole word (not part of another word like 'adapt')
-    command = re.sub(r'\bapt\b', 'apt-get', command)
-    
+    command = re.sub(r'\bapt(?!-get)\b', 'apt-get', command)
+
     # Add DEBIAN_FRONTEND=noninteractive for update/upgrade commands
     if 'apt-get update' in command or 'apt-get upgrade' in command:
         if 'DEBIAN_FRONTEND' not in command:
