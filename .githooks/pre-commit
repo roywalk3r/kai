@@ -1,0 +1,18 @@
+#!/bin/bash
+# Pre-commit hook to verify requirements.txt is up to date
+
+echo "🔍 Verifying requirements.txt..."
+
+# Run verification script
+python3 verify-requirements.py
+
+if [ $? -ne 0 ]; then
+    echo ""
+    echo "❌ requirements.txt verification failed!"
+    echo "Please update requirements.txt before committing."
+    echo ""
+    exit 1
+fi
+
+echo "✅ requirements.txt is up to date"
+exit 0

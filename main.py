@@ -262,6 +262,91 @@ def main():
             print_error(f"Unexpected error: {str(e)}")
             continue
 
+def execute_one_shot(query: str):
+    """Execute a single query and exit."""
+    from rich.panel import Panel
+    
+    # Show what we're processing
+    console.print(Panel(
+        f"[bright_cyan]💬 {query}[/bright_cyan]",
+        border_style="bright_cyan",
+        title="[bold bright_cyan]Query[/bold bright_cyan]",
+        title_align="left",
+        padding=(0, 1)
+    ))
+    console.print()
+    
+    # Get AI response
+    response = ask_ai(query)
+    
+    # Handle different response types
+    if response["intent"] == "error":
+        print_error(response["message"])
+        sys.exit(1)
+    
+    elif response["intent"] == "explain":
+        print_ai_response(response["message"])
+        sys.exit(0)
+    
+    elif response["intent"] == "run":
+        command = response["command"]
+        warning = response.get("warning")
+        safety_level = response.get("safety_level", SafetyLevel.SAFE)
+        
+        # Check if command is interactive
+        from utils.safety import is_interactive_command
+        is_interactive = is_interactive_command(command)
+        
+        # Show warning if present
+        if warning:
+            from rich.panel import Panel
+            
+            if safety_level == SafetyLevel.DANGEROUS:
+                warning_panel = Panel(
+                    f"[bold red]⚠️  DANGER![/bold red]\n\n"
+                    f"[bright_white]{warning}[/bright_white]\n\n"
+                    f"[dim]This command could be destructive![/dim]",
+                    border_style="red",
+                    title="[bold red]⚠️  Warning[/bold red]",
+                    title_align="left",
+                    padding=(1, 2)
+                )
+                console.print(warning_panel)
+                
+                if not confirm("[bold red]Are you SURE you want to run this?[/bold red]", default=False):
+                    console.print("[yellow]Command cancelled[/yellow]")
+                    sys.exit(0)
+            else:
+                warning_panel = Panel(
+                    f"[bright_white]{warning}[/bright_white]",
+                    border_style="yellow",
+                    title="[bold yellow]⚠️  Warning[/bold yellow]",
+                    title_align="left",
+                    padding=(1, 2)
+                )
+                console.print(warning_panel)
+                
+                if not confirm("[yellow]Proceed?[/yellow]", default=True):
+                    console.print("[yellow]Command cancelled[/yellow]")
+                    sys.exit(0)
+        
+        # Execute command
+        config = get_config()
+        dry_run = config.get("dry_run", False)
+        
+        if is_interactive and not dry_run:
+            print_info("Running interactive command...")
+            success, output = execute_command(command, dry_run=dry_run, interactive=True)
+        else:
+            success, output = execute_command(command, dry_run=dry_run, interactive=False)
+        
+        # Exit with appropriate code
+        sys.exit(0 if success else 1)
+    
+    else:
+        print_error(f"Unknown intent: {response['intent']}")
+        sys.exit(1)
+
 def handle_subcommand(subcommand: str, args: list):
     """Handle subcommands like update, uninstall, config, etc."""
     import subprocess
@@ -431,32 +516,44 @@ if __name__ == "__main__":
         description="Kai - AI-Powered Terminal Assistant",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
-Subcommands:
+Usage Modes:
+
+1. Interactive Mode:
+  kai                    Start interactive session
+
+2. One-Shot Mode (NEW!):
+  kai "query"            Execute a single query and exit
+  
+  Examples:
+    kai "list my files"
+    kai "update my system"
+    kai "show disk usage"
+    kai "create a backup of my documents"
+
+3. Subcommands:
   kai update             Update Kai to the latest version
   kai uninstall          Uninstall Kai from the system
   kai config [show|edit|reset]  Manage configuration
   kai history [clear|export]    Manage command history
   kai info               Show system information
 
-Examples:
-  kai                    Start interactive mode
-  kai update             Update to latest version
-  kai config show        Show current configuration
-  kai history clear      Clear command history
+More Examples:
   kai --version          Show version information
+  kai --dry-run          Enable preview mode
+  kai "find python files" --dry-run  Preview without executing
 
 For more information, visit: https://github.com/roywalk3r/kai
         """
     )
     parser.add_argument(
-        'subcommand',
+        'command',
         nargs='?',
-        help='Subcommand to execute (update, uninstall, config, history, info)'
+        help='Command or subcommand to execute (update, uninstall, config, history, info, or natural language query)'
     )
     parser.add_argument(
         'args',
         nargs='*',
-        help='Additional arguments for subcommand'
+        help='Additional arguments for subcommand or rest of the query'
     )
     parser.add_argument(
         '--version', '-v',
@@ -476,10 +573,24 @@ For more information, visit: https://github.com/roywalk3r/kai
     
     args = parser.parse_args()
     
-    # Handle subcommands
-    if args.subcommand:
-        handle_subcommand(args.subcommand, args.args)
-        sys.exit(0)
+    # Check if it's a subcommand or a one-shot query
+    if args.command:
+        # List of known subcommands
+        subcommands = ['update', 'uninstall', 'config', 'history', 'info']
+        
+        if args.command in subcommands:
+            # It's a subcommand
+            handle_subcommand(args.command, args.args)
+            sys.exit(0)
+        else:
+            # It's a one-shot query - execute and exit
+            query = args.command
+            if args.args:
+                query += ' ' + ' '.join(args.args)
+            
+            # Execute one-shot command
+            execute_one_shot(query)
+            sys.exit(0)
     
     # Set dry-run mode if specified
     if args.dry_run:
