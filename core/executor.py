@@ -42,6 +42,15 @@ def execute_command(cmd: str, dry_run: bool = False, interactive: bool = False) 
     """
     global current_process, process_timer
     
+    # Sanitize command for better compatibility
+    from utils.command_sanitizer import sanitize_command, get_command_warnings
+    original_cmd = cmd
+    cmd = sanitize_command(cmd)
+    
+    # Show info if command was modified
+    if cmd != original_cmd:
+        console.print(f"[dim]ℹ️  Command optimized for script compatibility[/dim]")
+    
     # Determine appropriate timeout based on command
     from utils.command_classifier import classify_command_timeout, format_timeout_message
     classification, timeout_seconds = classify_command_timeout(cmd)
