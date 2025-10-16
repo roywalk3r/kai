@@ -5,6 +5,11 @@ prompt-toolkit>=3.0.43
 # AI Models
 google-genai>=0.2.0
 
+# Quick Actions & Utilities
+pyqrcode>=1.2.1
+pypng>=0.20220715.0
+pytz>=2024.1
+
 # Note: Ollama is optional and installed separately
 # Visit: https://ollama.ai for installation instructions
 

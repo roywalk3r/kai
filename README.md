@@ -6,15 +6,25 @@ Prometheus is an AI-powered terminal assistant that translates natural language 
 
 ## Features
 
+### Core Features
 ✨ **Natural Language to Commands**: Describe what you want in plain English
 🛡️ **Safety First**: Warns about dangerous or long-running commands
 ⚡ **Smart Execution**: Auto-timeout for runaway processes
-📝 **Command History**: Track and replay previous commands
+📝 **Command History**: Track and replay previous commands with bash-style `!!` and `!n`
 🎨 **Beautiful UI**: Rich terminal interface with colors and formatting
 🔧 **Configurable**: Customize behavior via config file
-💡 **Context Aware**: Remembers your working directory and environment
+💡 **Context Aware**: Auto-detects Git, Python, Node.js, Docker projects
 🔍 **Dry Run Mode**: Preview commands before execution
 📚 **Command Suggestions**: Get help with common tasks
+
+### Terminal-First Enhancements
+⚡ **Quick Actions**: URL shortener, QR codes, hashing, encoding, world clock
+⌨️ **Keyboard Shortcuts**: Edit in $EDITOR (Ctrl+X Ctrl+E), explain last (Alt+E), and more
+🔍 **Smart Search**: Fuzzy file search, smart grep, codebase search
+📊 **History Analytics**: Usage statistics, most-used commands, success rates
+🎯 **Context Commands**: Project-aware suggestions (Git, Python, Node.js, Docker)
+🔌 **Plugin System**: Extend functionality with custom plugins
+🛠️ **Error Recovery**: AI-powered fix suggestions with `--fix` flag
 
 ## Installation
 
@@ -95,19 +105,64 @@ Then interact naturally:
 
 ### Special Commands
 
+**Basic Commands:**
 - `exit` or `quit` - Exit Prometheus
 - `terminate` - Stop currently running command
+- `help` - Show comprehensive help
+- `config` - Show/edit configuration
+
+**Quick Actions:**
+- `--qr "text"` - Generate QR code
+- `--hash "text"` - Generate hash (MD5, SHA1, SHA256, SHA512)
+- `--time "Tokyo"` - Show world time
+- `--encode base64 "text"` - Encode text
+- `--calc "2+2"` - Calculate expressions
+
+**Search & Navigation:**
+- `find <pattern>` - Fuzzy file search
+- `grep <pattern>` - Search in files
+- `search <name>` - Find in codebase
+- `analyze` - Analyze project
+
+**Context Commands:**
+- `status` - Show quick directory status
+- `ref` - Show context-relevant commands
+- `stats` - Show history statistics
+
+**History Commands:**
 - `history` - Show command history
-- `help` - Show help information
-- `config` - Show current configuration
+- `!!` - Repeat last command
+- `!n` - Repeat command at index n
+- `!git` - Repeat last git command
+
+**Plugin System:**
+- `plugin list` - List installed plugins
+- `plugin create <name>` - Create plugin template
 
 ### Subcommands
 
+**System Management:**
 - `prom update` - Update to latest version
 - `prom uninstall` - Uninstall from system
-- `prom config` - Manage configuration
-- `prom history` - Manage command history
+- `prom info` - Show system information
 - `prom --version` - Show version
+
+**Configuration:**
+- `prom config show` - Show current config
+- `prom config edit` - Edit config file
+- `prom config reset` - Reset to defaults
+
+**History Management:**
+- `prom history` - Show command history
+- `prom history clear` - Clear history
+- `prom history export` - Export history
+
+**Quick Actions (CLI):**
+- `prom --fix` - Fix last failed command
+- `prom --explain` - Explain last command
+- `prom --qr "text"` - Generate QR code
+- `prom --hash "text"` - Generate hash
+- `prom --time "location"` - Show world time
 
 ### Configuration
 
@@ -169,12 +224,18 @@ prometheus/
 ├── core/
 │   ├── executor.py     # Command execution engine
 │   ├── history.py      # Command history management
-│   └── config.py       # Configuration management
+│   ├── config.py       # Configuration management
+│   └── plugins.py      # Plugin system (NEW)
 └── utils/
-    ├── safety.py       # Safety checks and validation
+    ├── safety.py           # Safety checks and validation
     ├── command_classifier.py  # Intelligent timeout classification
     ├── command_sanitizer.py   # Command optimization
-    └── ui.py           # UI helpers and formatting
+    ├── ui.py               # UI helpers and formatting
+    ├── quick_actions.py    # Quick utilities (NEW)
+    ├── search.py           # Search & navigation (NEW)
+    ├── keyboard.py         # Keyboard shortcuts (NEW)
+    ├── smart_history.py    # Enhanced history (NEW)
+    └── context_commands.py # Context awareness (NEW)
 ```
 
 ## Contributing
@@ -209,13 +270,28 @@ Make sure you have appropriate permissions for the commands you're trying to run
 
 ## Roadmap
 
+**Completed:**
+- [x] Plugin system for custom commands ✅
+- [x] Command explanation mode ✅
+- [x] Keyboard shortcuts ✅
+- [x] Enhanced search capabilities ✅
+- [x] Context-aware suggestions ✅
+
+**Planned:**
 - [ ] Support for multiple LLM backends (OpenAI, Anthropic, etc.)
-- [ ] Plugin system for custom commands
-- [ ] Command aliasing and shortcuts
 - [ ] Multi-language support
 - [ ] Web interface
-- [ ] Command explanation mode
-- [ ] Integration with popular CLI tools
+- [ ] Command chaining with pipes
+- [ ] Cloud sync for history and config
+- [ ] VS Code extension
+
+## Documentation
+
+- [QUICKSTART.md](QUICKSTART.md) - Get started in 5 minutes
+- [TERMINAL_FEATURES.md](TERMINAL_FEATURES.md) - Complete feature guide
+- [GEMINI_SETUP.md](GEMINI_SETUP.md) - Gemini API setup
+- [TROUBLESHOOTING.md](TROUBLESHOOTING.md) - Common issues
+- [IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md) - Technical details
 
 ## Credits
 
@@ -223,3 +299,5 @@ Built with:
 - [Rich](https://github.com/Textualize/rich) - Terminal formatting
 - [Ollama](https://ollama.ai/) - Local LLM inference
 - [Prompt Toolkit](https://github.com/prompt-toolkit/python-prompt-toolkit) - Interactive CLI
+- [PyQRCode](https://github.com/mnooner256/pyqrcode) - QR code generation
+- [pytz](https://pythonhosted.org/pytz/) - Timezone support

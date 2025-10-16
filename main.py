@@ -23,6 +23,10 @@ from utils.ui import (
 )
 from utils.safety import SafetyLevel
 from utils.suggestions import format_suggestions_help
+from utils.smart_history import SmartHistory, handle_bang_commands
+from utils.context_commands import ContextAnalyzer, show_quick_status
+from utils.keyboard import create_key_bindings
+from core.plugins import get_plugin_manager
 from rich.markdown import Markdown
 
 def handle_special_command(query: str) -> bool:
@@ -34,6 +38,8 @@ def handle_special_command(query: str) -> bool:
     """
     config = get_config()
     history = get_history()
+    smart_history = SmartHistory()
+    plugin_manager = get_plugin_manager()
     
     # Exit commands
     if query in ["exit", "quit", "q"]:
@@ -121,6 +127,147 @@ def handle_special_command(query: str) -> bool:
         print_first_time_welcome()
         return True
     
+    # Quick actions
+    elif query.startswith("--shorten "):
+        from utils.quick_actions import shorten_url
+        url = query.split(maxsplit=1)[1]
+        shorten_url(url)
+        return True
+    
+    elif query.startswith("--qr "):
+        from utils.quick_actions import generate_qr_code
+        text = query.split(maxsplit=1)[1]
+        generate_qr_code(text)
+        return True
+    
+    elif query.startswith("--hash "):
+        from utils.quick_actions import generate_hash
+        parts = query.split(maxsplit=2)
+        if len(parts) == 3:
+            generate_hash(parts[2], parts[1])
+        else:
+            generate_hash(parts[1])
+        return True
+    
+    elif query.startswith("--encode "):
+        from utils.quick_actions import encode_text
+        parts = query.split(maxsplit=2)
+        if len(parts) == 3:
+            encode_text(parts[2], parts[1])
+        else:
+            encode_text(parts[1])
+        return True
+    
+    elif query.startswith("--decode "):
+        from utils.quick_actions import decode_text
+        parts = query.split(maxsplit=2)
+        if len(parts) == 3:
+            decode_text(parts[2], parts[1])
+        else:
+            decode_text(parts[1])
+        return True
+    
+    elif query.startswith("--time"):
+        from utils.quick_actions import world_time, show_multiple_times
+        if len(query.split()) > 1:
+            location = query.split(maxsplit=1)[1]
+            world_time(location)
+        else:
+            show_multiple_times()
+        return True
+    
+    elif query.startswith("--calc "):
+        from utils.quick_actions import calculate
+        expression = query.split(maxsplit=1)[1]
+        calculate(expression)
+        return True
+    
+    # Search & Navigation
+    elif query.startswith("find "):
+        from utils.search import fuzzy_find_file
+        pattern = query.split(maxsplit=1)[1]
+        files = fuzzy_find_file(pattern)
+        if files:
+            console.print("[bold cyan]Found files:[/bold cyan]")
+            for f in files:
+                console.print(f"  [bright_white]{f}[/bright_white]")
+        else:
+            print_warning(f"No files found matching '{pattern}'")
+        return True
+    
+    elif query.startswith("grep "):
+        from utils.search import search_in_files
+        pattern = query.split(maxsplit=1)[1]
+        search_in_files(pattern)
+        return True
+    
+    elif query.startswith("search "):
+        from utils.search import find_in_codebase
+        pattern = query.split(maxsplit=1)[1]
+        find_in_codebase(pattern)
+        return True
+    
+    # Context commands
+    elif query == "status":
+        show_quick_status()
+        return True
+    
+    elif query == "ref" or query == "reference":
+        analyzer = ContextAnalyzer()
+        analyzer.show_context_help()
+        return True
+    
+    elif query == "analyze":
+        from utils.search import analyze_project
+        analyze_project()
+        return True
+    
+    # Smart history
+    elif query == "stats":
+        smart_history.show_statistics()
+        return True
+    
+    elif query.startswith("!"):
+        # Handle bang commands
+        cmd = handle_bang_commands(query)
+        if cmd:
+            # Execute the command
+            from ai.model import ask_ai
+            response = ask_ai(f"run: {cmd}")
+            if response["intent"] == "run":
+                success, output = execute_command(response["command"])
+                if not config.get("dry_run", False):
+                    history.add(query, response["command"], success, output)
+        return True
+    
+    # Plugin commands
+    elif query.startswith("plugin "):
+        parts = query.split()
+        if len(parts) < 2:
+            print_error("Usage: plugin [list|install|uninstall|create] [name]")
+            return True
+        
+        subcommand = parts[1]
+        
+        if subcommand == "list":
+            plugin_manager.list_plugins()
+        elif subcommand == "install" and len(parts) >= 3:
+            plugin_name = parts[2]
+            source = parts[3] if len(parts) > 3 else ""
+            plugin_manager.install_plugin(plugin_name, source)
+        elif subcommand == "uninstall" and len(parts) >= 3:
+            plugin_manager.uninstall_plugin(parts[2])
+        elif subcommand == "create" and len(parts) >= 3:
+            from core.plugins import create_plugin_template
+            create_plugin_template(parts[2])
+        else:
+            print_error("Usage: plugin [list|install|uninstall|create] [name]")
+        return True
+    
+    # Try plugin handlers
+    if plugin_manager.handle_command(query.split()[0] if query else "", query.split()[1:] if len(query.split()) > 1 else []):
+        return True
+    
     return False
 
 def main():
@@ -140,11 +287,21 @@ def main():
     def get_prompt():
         return HTML('<ansibrightred><b>🔥 prometheus</b></ansibrightred> <ansiyellow>❯</ansiyellow> ')
     
+    # Create key bindings
+    session_state = {}
+    key_bindings = create_key_bindings(session_state)
+    
     session = PromptSession(
         message=get_prompt,
         history=FileHistory(str(prometheus_dir / "prompt_history")),
         auto_suggest=AutoSuggestFromHistory(),
+        key_bindings=key_bindings,
+        enable_history_search=True,
     )
+    
+    # Load plugins
+    plugin_manager = get_plugin_manager()
+    plugin_manager.load_all_plugins()
     
     # Print banner
     print_banner()
@@ -570,8 +727,103 @@ For more information, visit: https://github.com/roywalk3r/prometheus
         action='store_true',
         help='Skip the welcome banner'
     )
+    parser.add_argument(
+        '--fix',
+        action='store_true',
+        help='Fix errors from last command'
+    )
+    parser.add_argument(
+        '--explain',
+        action='store_true',
+        help='Explain last command'
+    )
+    parser.add_argument(
+        '--shorten',
+        type=str,
+        metavar='URL',
+        help='Shorten a URL'
+    )
+    parser.add_argument(
+        '--qr',
+        type=str,
+        metavar='TEXT',
+        help='Generate QR code'
+    )
+    parser.add_argument(
+        '--hash',
+        type=str,
+        metavar='TEXT',
+        help='Generate hash of text'
+    )
+    parser.add_argument(
+        '--encode',
+        nargs=2,
+        metavar=('TYPE', 'TEXT'),
+        help='Encode text (base64, hex, etc.)'
+    )
+    parser.add_argument(
+        '--time',
+        type=str,
+        nargs='?',
+        const='all',
+        metavar='LOCATION',
+        help='Show world time'
+    )
     
     args = parser.parse_args()
+    
+    # Handle quick action flags
+    if args.shorten:
+        from utils.quick_actions import shorten_url
+        shorten_url(args.shorten)
+        sys.exit(0)
+    
+    if args.qr:
+        from utils.quick_actions import generate_qr_code
+        generate_qr_code(args.qr)
+        sys.exit(0)
+    
+    if args.hash:
+        from utils.quick_actions import generate_hash
+        generate_hash(args.hash)
+        sys.exit(0)
+    
+    if args.encode:
+        from utils.quick_actions import encode_text
+        encode_text(args.encode[1], args.encode[0])
+        sys.exit(0)
+    
+    if args.time:
+        from utils.quick_actions import world_time, show_multiple_times
+        if args.time == 'all':
+            show_multiple_times()
+        else:
+            world_time(args.time)
+        sys.exit(0)
+    
+    if args.fix:
+        from utils.smart_history import SmartHistory
+        smart_history = SmartHistory()
+        last_failed = smart_history.get_last_failed_command()
+        if last_failed:
+            console.print(f"[yellow]Last failed command:[/yellow] {last_failed}")
+            console.print("[dim]Analyzing error...[/dim]")
+            # Let AI suggest fix
+            execute_one_shot(f"fix this command: {last_failed}")
+        else:
+            console.print("[yellow]No failed commands in history[/yellow]")
+        sys.exit(0)
+    
+    if args.explain:
+        from utils.smart_history import SmartHistory
+        smart_history = SmartHistory()
+        last_cmd = smart_history.get_last_command()
+        if last_cmd:
+            console.print(f"[cyan]Last command:[/cyan] {last_cmd}")
+            execute_one_shot(f"explain this command: {last_cmd}")
+        else:
+            console.print("[yellow]No commands in history[/yellow]")
+        sys.exit(0)
     
     # Check if it's a subcommand or a one-shot query
     if args.command:

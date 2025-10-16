@@ -232,15 +232,49 @@ Just describe what you want to do:
 ## Special Commands
 - **exit/quit/q** - Exit Prometheus
 - **terminate** - Stop currently running command
+- **help/?** - Show this help message
+- **clear/cls** - Clear screen
+- **welcome** - Show welcome screen again
+
+## History Commands
 - **history [n]** - Show last n commands (default: 10)
 - **clear-history** - Clear command history
+- **stats** - Show command usage statistics
+- **!!** - Repeat last command
+- **!n** - Repeat command at index n
+- **!-n** - Repeat n commands ago
+- **!string** - Repeat last command starting with string
+
+## Quick Actions
+- **--shorten <url>** - Shorten a URL
+- **--qr <text>** - Generate QR code
+- **--hash <text>** - Generate hash (MD5, SHA1, SHA256, SHA512)
+- **--encode <type> <text>** - Encode text (base64, hex, url)
+- **--decode <type> <text>** - Decode text
+- **--time [location]** - Show world time
+- **--calc <expression>** - Calculate math expression
+
+## Search & Navigation
+- **find <pattern>** - Fuzzy find files
+- **grep <pattern>** - Search in files
+- **search <name>** - Find function/class in codebase
+- **analyze** - Analyze current project
+
+## Context Commands
+- **status** - Show quick directory status
+- **ref/reference** - Show context-relevant commands
+
+## Configuration
 - **config** - Show current configuration
 - **config set <key> <value>** - Set configuration value
 - **dry-run on/off** - Toggle dry-run mode
 - **examples/suggestions** - Show example commands
-- **welcome** - Show welcome screen again
-- **help/?** - Show this help message
-- **clear/cls** - Clear screen
+
+## Plugin System
+- **plugin list** - List installed plugins
+- **plugin install <name>** - Install a plugin
+- **plugin uninstall <name>** - Uninstall a plugin
+- **plugin create <name>** - Create plugin template
 
 ## Configuration Options
 - **timeout_seconds** - Command timeout (default: 20)
@@ -248,6 +282,16 @@ Just describe what you want to do:
 - **auto_confirm_safe** - Auto-confirm safe commands (default: false)
 - **history_size** - Max history entries (default: 100)
 - **dry_run** - Preview commands without executing (default: false)
+
+## Keyboard Shortcuts
+- **Ctrl+Space** - Auto-complete paths/commands
+- **Ctrl+X Ctrl+E** - Edit command in $EDITOR
+- **Alt+E** - Explain last command
+- **Ctrl+L** - Clear screen (keep command)
+- **Alt+H** - Show keyboard shortcuts help
+- **Ctrl+R** - Search command history
+- **Ctrl+D** - Exit Prometheus
+- **Ctrl+C** - Cancel current input
 
 ## Examples
 ```

@@ -11,8 +11,8 @@ from pathlib import Path
 # Standard library modules (don't need to be in requirements.txt)
 STDLIB_MODULES = {
     'abc', 'argparse', 'ast', 'asyncio', 'base64', 'collections', 'copy',
-    'datetime', 'enum', 'functools', 'glob', 'hashlib', 'io', 'itertools',
-    'json', 'logging', 'math', 'os', 'pathlib', 'platform', 're', 'shutil',
+    'datetime', 'enum', 'functools', 'glob', 'hashlib', 'importlib', 'io', 'itertools',
+    'json', 'logging', 'math', 'operator', 'os', 'pathlib', 'platform', 're', 'shutil',
     'signal', 'socket', 'string', 'subprocess', 'sys', 'tempfile', 'threading',
     'time', 'typing', 'unittest', 'urllib', 'uuid', 'warnings', 'weakref',
     'setuptools', 'distutils', 'pkg_resources'  # Usually included with Python
