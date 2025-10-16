@@ -1,4 +1,4 @@
-"""Command suggestions and examples for Kai."""
+"""Command suggestions and examples for Prometheus."""
 
 from typing import List, Dict
 

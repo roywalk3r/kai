@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to Prometheus will be documented in this file.
+All notable changes to Kai will be documented in this file.
 
 ## [1.0.0] - 2025-10-15
 
@@ -26,7 +26,7 @@ All notable changes to Prometheus will be documented in this file.
   - Prompt history with auto-suggestions
   
 - **Configuration System**
-  - JSON-based configuration in ~/.prometheus/config.json
+  - JSON-based configuration in ~/.kai/config.json
   - Runtime configuration changes
   - Customizable timeout, model, and behavior settings
   

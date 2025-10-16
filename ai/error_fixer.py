@@ -1,4 +1,4 @@
-"""Smart error detection and auto-fixing for Kai."""
+"""Smart error detection and auto-fixing for Prometheus."""
 
 import re
 from typing import Optional, Tuple

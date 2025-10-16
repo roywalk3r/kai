@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Kai - Intelligent Terminal Assistant
+Prometheus - Intelligent Terminal Assistant
 Main entry point for the application.
 """
 
@@ -131,18 +131,18 @@ def main():
     conv_context = get_conversation_context()
     
     # Setup prompt with history
-    kai_dir = Path.home() / ".kai"
-    kai_dir.mkdir(exist_ok=True)
+    prometheus_dir = Path.home() / ".prometheus"
+    prometheus_dir.mkdir(exist_ok=True)
     
     # Create custom prompt with style
     from prompt_toolkit.formatted_text import HTML
     
     def get_prompt():
-        return HTML('<ansibrightcyan><b>kai</b></ansibrightcyan> <ansiyellow>❯</ansiyellow> ')
+        return HTML('<ansibrightred><b>🔥 prometheus</b></ansibrightred> <ansiyellow>❯</ansiyellow> ')
     
     session = PromptSession(
         message=get_prompt,
-        history=FileHistory(str(kai_dir / "prompt_history")),
+        history=FileHistory(str(prometheus_dir / "prompt_history")),
         auto_suggest=AutoSuggestFromHistory(),
     )
     
@@ -355,7 +355,7 @@ def handle_subcommand(subcommand: str, args: list):
     
     if subcommand == "update":
         console.print(Panel(
-            "[bold bright_cyan]Updating Kai...[/bold bright_cyan]",
+            "[bold bright_cyan]Updating Prometheus...[/bold bright_cyan]",
             border_style="bright_cyan"
         ))
         
@@ -383,7 +383,7 @@ def handle_subcommand(subcommand: str, args: list):
                     cwd=script_dir
                 )
                 console.print("[green]✓ Dependencies updated[/green]")
-                console.print("\n[bold green]✅ Kai updated successfully![/bold green]")
+                console.print("\n[bold green]✅ Prometheus updated successfully![/bold green]")
             else:
                 console.print(f"[red]❌ Update failed: {result.stderr}[/red]")
         except Exception as e:
@@ -391,9 +391,9 @@ def handle_subcommand(subcommand: str, args: list):
     
     elif subcommand == "uninstall":
         console.print(Panel(
-            "[bold red]⚠️  Uninstalling Kai[/bold red]\n\n"
-            "[bright_white]This will remove Kai from your system.[/bright_white]\n"
-            "[dim]Your configuration in ~/.kai will be preserved.[/dim]",
+            "[bold red]⚠️  Uninstalling Prometheus[/bold red]\n\n"
+            "[bright_white]This will remove Prometheus from your system.[/bright_white]\n"
+            "[dim]Your configuration in ~/.prometheus will be preserved.[/dim]",
             border_style="red",
             title="[bold red]Uninstall[/bold red]"
         ))
@@ -413,7 +413,7 @@ def handle_subcommand(subcommand: str, args: list):
     elif subcommand == "config":
         if args and args[0] == "edit":
             # Open config in editor
-            config_file = Path.home() / ".kai" / "config.json"
+            config_file = Path.home() / ".prometheus" / "config.json"
             editor = os.environ.get("EDITOR", "nano")
             os.system(f"{editor} {config_file}")
         elif args and args[0] == "reset":
@@ -427,7 +427,7 @@ def handle_subcommand(subcommand: str, args: list):
             # Show config
             config = get_config()
             from rich.table import Table
-            table = Table(title="Kai Configuration", border_style="cyan")
+            table = Table(title="Prometheus Configuration", border_style="cyan")
             table.add_column("Setting", style="cyan")
             table.add_column("Value", style="bright_white")
             for key, value in config.config.items():
@@ -435,14 +435,14 @@ def handle_subcommand(subcommand: str, args: list):
             console.print(table)
         else:
             # Show config location
-            config_file = Path.home() / ".kai" / "config.json"
+            config_file = Path.home() / ".prometheus" / "config.json"
             console.print(Panel(
                 f"[bold bright_white]Configuration File:[/bold bright_white]\n"
                 f"[bright_cyan]{config_file}[/bright_cyan]\n\n"
                 f"[bold]Commands:[/bold]\n"
-                f"[cyan]kai config show[/cyan]   - Show current config\n"
-                f"[cyan]kai config edit[/cyan]   - Edit config file\n"
-                f"[cyan]kai config reset[/cyan]  - Reset to defaults",
+                f"[cyan]<alias> config show[/cyan]   - Show current config\n"
+                f"[cyan]<alias> config edit[/cyan]   - Edit config file\n"
+                f"[cyan]<alias> config reset[/cyan]  - Reset to defaults",
                 border_style="bright_cyan",
                 title="[bold bright_cyan]Configuration[/bold bright_cyan]"
             ))
@@ -456,7 +456,7 @@ def handle_subcommand(subcommand: str, args: list):
                 console.print("[green]✓ History cleared[/green]")
         elif args and args[0] == "export":
             # Export history to file
-            filename = args[1] if len(args) > 1 else "kai_history.json"
+            filename = args[1] if len(args) > 1 else "prometheus_history.json"
             history = get_history()
             import json
             with open(filename, 'w') as f:
@@ -486,14 +486,14 @@ def handle_subcommand(subcommand: str, args: list):
         from rich.table import Table
         import platform
         
-        table = Table(title="Kai System Information", border_style="bright_cyan")
+        table = Table(title="Prometheus System Information", border_style="bright_cyan")
         table.add_column("Property", style="cyan")
         table.add_column("Value", style="bright_white")
         
         script_dir = Path(__file__).parent.absolute()
         table.add_row("Version", "1.0.0")
         table.add_row("Install Location", str(script_dir))
-        table.add_row("Config Directory", str(Path.home() / ".kai"))
+        table.add_row("Config Directory", str(Path.home() / ".prometheus"))
         table.add_row("Python Version", platform.python_version())
         table.add_row("Platform", platform.platform())
         
@@ -508,41 +508,41 @@ def handle_subcommand(subcommand: str, args: list):
     
     else:
         console.print(f"[red]Unknown subcommand: {subcommand}[/red]")
-        console.print("Run [cyan]kai --help[/cyan] for available commands")
+        console.print("Run [cyan]<your-alias> --help[/cyan] for available commands")
 
 if __name__ == "__main__":
     # Parse command-line arguments
     parser = argparse.ArgumentParser(
-        description="Kai - AI-Powered Terminal Assistant",
+        description="Prometheus - AI-Powered Terminal Assistant",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Usage Modes:
 
 1. Interactive Mode:
-  kai                    Start interactive session
+  <your-alias>           Start interactive session (e.g., prom)
 
-2. One-Shot Mode (NEW!):
-  kai "query"            Execute a single query and exit
+2. One-Shot Mode:
+  <your-alias> "query"   Execute a single query and exit
   
   Examples:
-    kai "list my files"
-    kai "update my system"
-    kai "show disk usage"
-    kai "create a backup of my documents"
+    prom "list my files"
+    prom "update my system"
+    prom "show disk usage"
+    prom "create a backup of my documents"
 
 3. Subcommands:
-  kai update             Update Kai to the latest version
-  kai uninstall          Uninstall Kai from the system
-  kai config [show|edit|reset]  Manage configuration
-  kai history [clear|export]    Manage command history
-  kai info               Show system information
+  <your-alias> update             Update Prometheus to the latest version
+  <your-alias> uninstall          Uninstall Prometheus from the system
+  <your-alias> config [show|edit|reset]  Manage configuration
+  <your-alias> history [clear|export]    Manage command history
+  <your-alias> info               Show system information
 
 More Examples:
-  kai --version          Show version information
-  kai --dry-run          Enable preview mode
-  kai "find python files" --dry-run  Preview without executing
+  prom --version         Show version information
+  prom --dry-run         Enable preview mode
+  prom "find python files" --dry-run  Preview without executing
 
-For more information, visit: https://github.com/roywalk3r/kai
+For more information, visit: https://github.com/roywalk3r/prometheus
         """
     )
     parser.add_argument(
@@ -558,7 +558,7 @@ For more information, visit: https://github.com/roywalk3r/kai
     parser.add_argument(
         '--version', '-v',
         action='version',
-        version='Kai Terminal Assistant v1.0.0'
+        version='Prometheus Terminal Assistant v1.0.0'
     )
     parser.add_argument(
         '--dry-run',

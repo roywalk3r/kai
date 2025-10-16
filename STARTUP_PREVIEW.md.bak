@@ -1,8 +1,8 @@
-# Prometheus First-Time Startup Preview
+# Kai First-Time Startup Preview
 
 ## 🎨 What You'll See
 
-When you start Prometheus for the first time, you'll experience a cool, animated welcome sequence!
+When you start Kai for the first time, you'll experience a cool, animated welcome sequence!
 
 ### 1. Enhanced Banner
 ```
@@ -27,7 +27,7 @@ When you start Prometheus for the first time, you'll experience a cool, animated
 
 ### 2. Animated Initialization (with time-based greeting)
 ```
-🌅 Good Morning! Welcome to Prometheus!
+🌅 Good Morning! Welcome to Kai!
 (or ☀️ Good Afternoon / 🌙 Good Evening)
 
   ▸ Initializing AI assistant... ✓
@@ -75,7 +75,7 @@ When you start Prometheus for the first time, you'll experience a cool, animated
 ## 🎯 Features
 
 ### Every Startup
-- Shows cool welcome screen **every time** you start Prometheus
+- Shows cool welcome screen **every time** you start Kai
 - Dynamic greeting based on time of day:
   - 🌅 "Good Morning" (before 12 PM)
   - ☀️ "Good Afternoon" (12 PM - 6 PM)
@@ -95,7 +95,7 @@ You can also trigger the welcome screen anytime:
 - 🕐 Dynamic greeting based on time of day
 
 ### Visual Elements
-- **Fire Torch Logo** - Prometheus flame design
+- **ASCII Art Logo** - Large KAI logo
 - **Rich Panels** - Bordered sections with colors
 - **Icons** - Emojis for visual appeal
 - **Color Scheme** - Cyan, green, yellow theme
@@ -105,14 +105,14 @@ You can also trigger the welcome screen anytime:
 
 ### Every Time You Start
 ```bash
-# Start Prometheus - you'll see the cool welcome every time!
+# Start Kai - you'll see the cool welcome every time!
 source .venv/bin/activate
 python main.py
 ```
 
 ### See It Again During Session
 ```bash
-# Inside Prometheus
+# Inside Kai
 > welcome
 ```
 
@@ -134,12 +134,12 @@ The welcome screen uses Rich library features:
 5. **Personal** - Time-based greeting (morning/afternoon/evening)
 6. **Visually Appealing** - Colors, icons, and formatting
 7. **Responsive** - Adapts to terminal width
-8. **Consistent** - Shows every time you start Prometheus
+8. **Consistent** - Shows every time you start Kai
 
 ## 🎯 User Experience Flow
 
 ```
-Start Prometheus
+Start Kai
     ↓
 Show enhanced banner
     ↓

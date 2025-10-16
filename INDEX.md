@@ -1,13 +1,13 @@
-# Kai Project Index
+# Prometheus Project Index
 
-Complete guide to all files and documentation in the Kai project.
+Complete guide to all files and documentation in the Prometheus project.
 
 ---
 
 ## 📁 Project Structure
 
 ```
-kai/
+prometheus/
 ├── ai/                         # AI & Context Management
 ├── core/                       # Core Functionality
 ├── utils/                      # Utility Modules
@@ -29,9 +29,9 @@ kai/
 
 ### Quick Commands:
 ```bash
-./install.sh              # Install Kai
+./install.sh              # Install Prometheus
 python verify.py          # Verify installation
-python main.py            # Start Kai
+python main.py            # Start Prometheus
 ```
 
 ---
@@ -56,7 +56,7 @@ python main.py            # Start Kai
 ### Usage & Contribution
 | File | Purpose | Read When |
 |------|---------|-----------|
-| **demo.md** | Demo script for presentations | Presenting Kai |
+| **demo.md** | Demo script for presentations | Presenting Prometheus |
 | **CONTRIBUTING.md** | Contribution guidelines | Want to contribute |
 | **CHANGELOG.md** | Version history & roadmap | Want version info |
 
@@ -110,9 +110,9 @@ python main.py            # Start Kai
 ### Configuration
 - **.gitignore** - Git ignore patterns
 - **LICENSE** - MIT License
-- **~/.kai/config.json** - User configuration (created on first run)
-- **~/.kai/history.json** - Command history (created on first run)
-- **~/.kai/prompt_history** - Prompt history (created on first run)
+- **~/.prometheus/config.json** - User configuration (created on first run)
+- **~/.prometheus/history.json** - Command history (created on first run)
+- **~/.prometheus/prompt_history** - Prompt history (created on first run)
 
 ---
 
@@ -150,26 +150,26 @@ python main.py            # Start Kai
 
 ## 🎯 Quick Reference
 
-### Running Kai
+### Running Prometheus
 ```bash
 # Activate environment
 source .venv/bin/activate
 
-# Start Kai
+# Start Prometheus
 python main.py
 
 # Or with alias
-alias kai='cd /path/to/kai && source .venv/bin/activate && python main.py'
+alias prometheus='cd /path/to/prometheus && source .venv/bin/activate && python main.py'
 ```
 
-### Common Commands in Kai
+### Common Commands in Prometheus
 ```
 help                    # Show help
 examples                # Show examples
 history                 # Show history
 config                  # Show config
 dry-run on              # Enable preview
-exit                    # Exit Kai
+exit                    # Exit Prometheus
 ```
 
 ### Running Tests
@@ -193,14 +193,14 @@ Total Size: ~100 KB
 
 ### "How do I...?"
 
-**Install Kai?**
+**Install Prometheus?**
 → See QUICKSTART.md or README.md
 
-**Use Kai?**
+**Use Prometheus?**
 → See README.md or run `python main.py` and type `help`
 
-**Configure Kai?**
-→ See README.md section "Configuration" or type `config` in Kai
+**Configure Prometheus?**
+→ See README.md section "Configuration" or type `config` in Prometheus
 
 **Contribute?**
 → See CONTRIBUTING.md
@@ -281,8 +281,8 @@ Total Size: ~100 KB
 ## 📞 Quick Help
 
 ```
-Need help?           → Type 'help' in Kai
-Want examples?       → Type 'examples' in Kai
+Need help?           → Type 'help' in Prometheus
+Want examples?       → Type 'examples' in Prometheus
 Installation issue?  → Run 'python verify.py'
 Want to contribute?  → Read CONTRIBUTING.md
 Technical details?   → Read PROJECT_SUMMARY.md

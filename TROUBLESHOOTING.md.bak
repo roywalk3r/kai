@@ -1,4 +1,4 @@
-# Prometheus Troubleshooting Guide
+# Kai Troubleshooting Guide
 
 ## Common Issues and Solutions
 
@@ -19,7 +19,7 @@ I'm ready to assist you!  ❌ (Should generate: echo "Welcome!" >> file.txt)
    > write "hello" to the file
    ```
 
-2. **Restart Prometheus** - The improved prompts will take effect:
+2. **Restart Kai** - The improved prompts will take effect:
    ```bash
    # Exit and restart
    > exit
@@ -92,7 +92,7 @@ cat: output.txt: No such file or directory
 3. **Use context** - Reference previous commands:
    ```
    > create a file called myfile.txt
-   > show it  ✓ (Prometheus remembers "myfile.txt")
+   > show it  ✓ (Kai remembers "myfile.txt")
    ```
 
 ---
@@ -161,7 +161,7 @@ cat: output.txt: No such file or directory
 
 ### Dangerous Command Warnings
 
-**Problem**: Prometheus warns about dangerous commands
+**Problem**: Kai warns about dangerous commands
 
 **Example**:
 ```
@@ -170,7 +170,7 @@ cat: output.txt: No such file or directory
 ```
 
 **Solutions**:
-1. **This is intentional!** - Prometheus is protecting you
+1. **This is intentional!** - Kai is protecting you
 2. **Review the command** carefully before confirming
 3. **Use dry-run** to see what would happen:
    ```
@@ -285,19 +285,19 @@ ImportError: No module named 'rich'
 **Problem**: Command history doesn't persist
 
 **Solutions**:
-1. **Check ~/.prometheus directory**:
+1. **Check ~/.kai directory**:
    ```bash
-   ls -la ~/.prometheus/
+   ls -la ~/.kai/
    ```
 
 2. **Check permissions**:
    ```bash
-   chmod 755 ~/.prometheus
+   chmod 755 ~/.kai
    ```
 
 3. **Manually create directory**:
    ```bash
-   mkdir -p ~/.prometheus
+   mkdir -p ~/.kai
    ```
 
 ---
@@ -309,7 +309,7 @@ ImportError: No module named 'rich'
 **Solutions**:
 1. **Check config file**:
    ```bash
-   cat ~/.prometheus/config.json
+   cat ~/.kai/config.json
    ```
 
 2. **Set and verify**:
@@ -321,7 +321,7 @@ ImportError: No module named 'rich'
 
 3. **Check permissions**:
    ```bash
-   chmod 644 ~/.prometheus/config.json
+   chmod 644 ~/.kai/config.json
    ```
 
 ---
@@ -361,7 +361,7 @@ Enable verbose output:
 
 ### Check Logs
 
-View Prometheus's behavior:
+View Kai's behavior:
 ```
 > history 20
 ```
@@ -425,7 +425,7 @@ ollama run llama3 "translate to command: list my files"
 
 3. **Check GitHub issues** (if open source)
 
-4. **Restart Prometheus**:
+4. **Restart Kai**:
    ```
    > exit
    $ python main.py
@@ -433,4 +433,4 @@ ollama run llama3 "translate to command: list my files"
 
 ---
 
-**Remember**: Prometheus is designed to be safe. If it warns you about a command, take it seriously!
+**Remember**: Kai is designed to be safe. If it warns you about a command, take it seriously!

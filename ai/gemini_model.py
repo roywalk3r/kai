@@ -1,4 +1,4 @@
-"""Gemini AI model integration for Kai."""
+"""Gemini AI model integration for Prometheus."""
 
 import os
 from typing import Dict, Optional

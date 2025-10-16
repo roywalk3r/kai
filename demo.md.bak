@@ -1,10 +1,10 @@
-# Prometheus Demo Script
+# Kai Demo Script
 
-This document provides a step-by-step demo of Prometheus's features.
+This document provides a step-by-step demo of Kai's features.
 
 ## Prerequisites
 
-Make sure Prometheus is installed and running:
+Make sure Kai is installed and running:
 ```bash
 source .venv/bin/activate
 python main.py
@@ -32,9 +32,9 @@ Displays categorized command examples.
 Expected: `ls -lah`
 
 ```
-> create a file called demo.txt with "Hello Prometheus"
+> create a file called demo.txt with "Hello Kai"
 ```
-Expected: `echo "Hello Prometheus" > demo.txt`
+Expected: `echo "Hello Kai" > demo.txt`
 
 ```
 > show contents of demo.txt
@@ -148,7 +148,7 @@ Expected: `cat test.txt`
 ```
 > run an invalid command that doesn't exist
 ```
-Shows how Prometheus handles AI errors
+Shows how Kai handles AI errors
 
 ```
 > what is the meaning of life
@@ -175,7 +175,7 @@ Clears command history (requires confirmation)
 ```
 > exit
 ```
-Exits Prometheus
+Exits Kai
 
 ## Advanced Demo
 
@@ -191,7 +191,7 @@ Expected: Warning about long-running command
 ```
 > open nano to edit a file
 ```
-Expected: Prometheus refuses to run interactive commands
+Expected: Kai refuses to run interactive commands
 
 ### Batch Operations
 

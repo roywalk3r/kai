@@ -1,1 +1,1 @@
-"""Test suite for Kai terminal assistant."""
+"""Test suite for Prometheus terminal assistant."""

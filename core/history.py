@@ -1,4 +1,4 @@
-"""Command history management for Kai."""
+"""Command history management for Prometheus."""
 
 import json
 from pathlib import Path
@@ -6,11 +6,11 @@ from datetime import datetime
 from typing import List, Dict, Optional
 
 class CommandHistory:
-    """Manages command history for Kai."""
+    """Manages command history for Prometheus."""
     
     def __init__(self, max_size: int = 100):
         self.max_size = max_size
-        self.history_dir = Path.home() / ".kai"
+        self.history_dir = Path.home() / ".prometheus"
         self.history_file = self.history_dir / "history.json"
         self.history: List[Dict] = self._load_history()
     

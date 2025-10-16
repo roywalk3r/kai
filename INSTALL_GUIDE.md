@@ -1,10 +1,10 @@
-# Kai Installation Guide
+# Prometheus Installation Guide
 
 ## 🚀 Quick Install
 
 ```bash
-git clone https://github.com/roywalk3r/kai.git
-cd kai
+git clone https://github.com/roywalk3r/prometheus.git
+cd prometheus
 chmod +x install.sh
 ./install.sh
 ```
@@ -17,7 +17,7 @@ When you run `./install.sh`, here's what happens:
 
 ### Step 1: System Check
 ```
-🤖 Installing Kai Terminal Assistant...
+🤖 Installing Prometheus Terminal Assistant...
 ✓ Found Python 3.13
 ✓ Found Ollama
 ✓ Found llama3 model
@@ -35,7 +35,7 @@ Installing dependencies...
 🤖 AI Model Setup
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Kai supports two AI models:
+Prometheus supports two AI models:
   1. Gemini (Google) - Fast, accurate, cloud-based (Recommended)
   2. Ollama - Local, private, offline
 
@@ -61,13 +61,13 @@ Enter your Gemini API key (or press Enter to skip):
 **After entering your API key:**
 ```
 ✅ Gemini API key saved to /home/user/.bashrc
-   Kai will use Gemini AI (Google)
+   Prometheus will use Gemini AI (Google)
 ```
 
 **The script automatically:**
 - Saves API key to your shell config (.bashrc or .zshrc)
 - Sets it for current session
-- Configures Kai to use Gemini
+- Configures Prometheus to use Gemini
 
 ### Option B: Choose Ollama
 
@@ -84,24 +84,24 @@ Enter your Gemini API key (or press Enter to skip):
 **If you press Enter when asked for API key:**
 ```
 ℹ️  Skipping Gemini setup
-   Kai will use Ollama (local AI) by default
+   Prometheus will use Ollama (local AI) by default
 
    To use Gemini later:
    1. Get API key: https://aistudio.google.com/apikey
    2. export GEMINI_API_KEY="your-key-here"
-   3. Restart Kai
+   3. Restart Prometheus
 ```
 
 ### Step 4: Completion
 ```
 ✅ Installation complete!
 
-To start Kai, run:
+To start Prometheus, run:
   source .venv/bin/activate
   python main.py
 
 Or add an alias to your shell config:
-  alias kai='cd /path/to/kai && source .venv/bin/activate && python main.py'
+  alias prometheus='cd /path/to/prometheus && source .venv/bin/activate && python main.py'
 ```
 
 ---
@@ -116,7 +116,7 @@ Or add an alias to your shell config:
 export GEMINI_API_KEY="your-api-key-here"
 ```
 
-**Kai configuration:**
+**Prometheus configuration:**
 - `use_gemini: true` (default)
 - API key available in environment
 - Automatic fallback to Ollama if needed
@@ -125,7 +125,7 @@ export GEMINI_API_KEY="your-api-key-here"
 
 **No changes to shell config**
 
-**Kai configuration:**
+**Prometheus configuration:**
 - Uses Ollama by default
 - Can switch to Gemini anytime by setting API key
 
@@ -142,14 +142,14 @@ export GEMINI_API_KEY="your-api-key-here"
 echo 'export GEMINI_API_KEY="your-key-here"' >> ~/.bashrc
 source ~/.bashrc
 
-# Restart Kai
+# Restart Prometheus
 python main.py
 ```
 
 ### Switch to Ollama
 
 ```bash
-# In Kai
+# In Prometheus
 > config set use_gemini false
 
 # Or unset the API key
@@ -205,7 +205,7 @@ source ~/.bashrc
 
 ### API Key Not Working
 
-**Problem:** Kai still uses Ollama
+**Problem:** Prometheus still uses Ollama
 
 **Solution:**
 ```bash
@@ -215,7 +215,7 @@ echo $GEMINI_API_KEY
 # If empty, set it
 export GEMINI_API_KEY="your-key"
 
-# Restart Kai
+# Restart Prometheus
 python main.py
 ```
 

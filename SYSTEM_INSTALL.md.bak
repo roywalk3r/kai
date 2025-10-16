@@ -1,8 +1,8 @@
-# Prometheus System Installation Guide
+# Kai System Installation Guide
 
 ## 🚀 System-Wide Installation
 
-Install Prometheus once and access it from any terminal session!
+Install Kai once and access it from any terminal session!
 
 ---
 
@@ -13,15 +13,15 @@ Install Prometheus once and access it from any terminal session!
 Install for current user only (no sudo required):
 
 ```bash
-git clone https://github.com/roywalk3r/prometheus.git
-cd prometheus
+git clone https://github.com/roywalk3r/kai.git
+cd kai
 chmod +x system-install.sh
 ./system-install.sh
 ```
 
 **Installs to:**
-- `~/.local/share/prometheus` - Application files
-- `~/.local/bin/prometheus` - Executable
+- `~/.local/share/kai` - Application files
+- `~/.local/bin/kai` - Executable
 
 **Accessible by:** Current user only
 
@@ -32,15 +32,15 @@ chmod +x system-install.sh
 Install for all users (requires sudo):
 
 ```bash
-git clone https://github.com/roywalk3r/prometheus.git
-cd prometheus
+git clone https://github.com/roywalk3r/kai.git
+cd kai
 chmod +x system-install.sh
 sudo ./system-install.sh
 ```
 
 **Installs to:**
-- `/opt/prometheus` - Application files
-- `/usr/local/bin/prometheus` - Executable
+- `/opt/kai` - Application files
+- `/usr/local/bin/kai` - Executable
 
 **Accessible by:** All users on the system
 
@@ -52,22 +52,22 @@ sudo ./system-install.sh
 
 ```
 User Installation:
-~/.local/share/prometheus/          # Application files
+~/.local/share/kai/          # Application files
 ├── ai/                      # AI modules
 ├── core/                    # Core functionality
 ├── utils/                   # Utilities
 ├── .venv/                   # Virtual environment
 └── main.py                  # Entry point
 
-~/.local/bin/prometheus             # Executable wrapper
-~/.prometheus/                      # User data (config, history)
+~/.local/bin/kai             # Executable wrapper
+~/.kai/                      # User data (config, history)
 ```
 
 ```
 System Installation:
-/opt/prometheus/                    # Application files
-/usr/local/bin/prometheus           # Executable wrapper
-~/.prometheus/                      # User data (per user)
+/opt/kai/                    # Application files
+/usr/local/bin/kai           # Executable wrapper
+~/.kai/                      # User data (per user)
 ```
 
 ---
@@ -116,36 +116,36 @@ Or open a new terminal.
 ### 2. Verify Installation
 
 ```bash
-prometheus --version
+kai --version
 ```
 
-Should show: `Prometheus Terminal Assistant v1.0.0`
+Should show: `Kai Terminal Assistant v1.0.0`
 
 ### 3. Test It
 
 ```bash
-prometheus
+kai
 ```
 
-You should see the beautiful Prometheus welcome screen!
+You should see the beautiful Kai welcome screen!
 
 ---
 
 ## 💡 Usage
 
-### Start Prometheus
+### Start Kai
 
 ```bash
-prometheus
+kai
 ```
 
 ### Command-Line Options
 
 ```bash
-prometheus --help              # Show help
-prometheus --version           # Show version
-prometheus --dry-run           # Enable preview mode
-prometheus --no-banner         # Skip welcome screen
+kai --help              # Show help
+kai --version           # Show version
+kai --dry-run           # Enable preview mode
+kai --no-banner         # Skip welcome screen
 ```
 
 ### Access from Anywhere
@@ -153,7 +153,7 @@ prometheus --no-banner         # Skip welcome screen
 ```bash
 # From any directory
 cd /tmp
-prometheus
+kai
 
 # Works in any terminal session
 # Works after reboot
@@ -162,12 +162,12 @@ prometheus
 
 ---
 
-## 🔄 Updating Prometheus
+## 🔄 Updating Kai
 
 ### User Installation
 
 ```bash
-cd ~/.local/share/prometheus
+cd ~/.local/share/kai
 git pull
 .venv/bin/pip install -r requirements.txt
 ```
@@ -175,7 +175,7 @@ git pull
 ### System Installation
 
 ```bash
-cd /opt/prometheus
+cd /opt/kai
 sudo git pull
 sudo .venv/bin/pip install -r requirements.txt
 ```
@@ -188,11 +188,11 @@ sudo .venv/bin/pip install -r requirements.txt
 
 ```bash
 # User installation
-cd ~/.local/share/prometheus
+cd ~/.local/share/kai
 ./uninstall.sh
 
 # System installation
-cd /opt/prometheus
+cd /opt/kai
 sudo ./uninstall.sh
 ```
 
@@ -200,27 +200,27 @@ sudo ./uninstall.sh
 
 **User Installation:**
 ```bash
-rm -rf ~/.local/share/prometheus
-rm ~/.local/bin/prometheus
+rm -rf ~/.local/share/kai
+rm ~/.local/bin/kai
 ```
 
 **System Installation:**
 ```bash
-sudo rm -rf /opt/prometheus
-sudo rm /usr/local/bin/prometheus
+sudo rm -rf /opt/kai
+sudo rm /usr/local/bin/kai
 ```
 
 ### Remove User Data (Optional)
 
 ```bash
-rm -rf ~/.prometheus
+rm -rf ~/.kai
 ```
 
 ### Remove API Key from Shell Config
 
 Edit `~/.bashrc` or `~/.zshrc` and remove:
 ```bash
-# Prometheus - Gemini API Key
+# Kai - Gemini API Key
 export GEMINI_API_KEY="..."
 ```
 
@@ -228,7 +228,7 @@ export GEMINI_API_KEY="..."
 
 ## 🛠️ Troubleshooting
 
-### "prometheus: command not found"
+### "kai: command not found"
 
 **Problem:** `~/.local/bin` not in PATH
 
@@ -247,9 +247,9 @@ source ~/.bashrc
 
 **Solution:**
 ```bash
-chmod +x ~/.local/bin/prometheus
+chmod +x ~/.local/bin/kai
 # or
-sudo chmod +x /usr/local/bin/prometheus
+sudo chmod +x /usr/local/bin/kai
 ```
 
 ### Gemini API Key Not Working
@@ -274,11 +274,11 @@ source ~/.bashrc
 **Solution:**
 ```bash
 # User installation
-cd ~/.local/share/prometheus
+cd ~/.local/share/kai
 git pull
 
 # System installation
-cd /opt/prometheus
+cd /opt/kai
 sudo git pull
 ```
 
@@ -312,22 +312,22 @@ Install different versions:
 ```bash
 # Version 1
 ./system-install.sh
-mv ~/.local/bin/prometheus ~/.local/bin/prometheus-v1
+mv ~/.local/bin/kai ~/.local/bin/kai-v1
 
 # Version 2
 git checkout v2.0
 ./system-install.sh
-mv ~/.local/bin/prometheus ~/.local/bin/prometheus-v2
+mv ~/.local/bin/kai ~/.local/bin/kai-v2
 ```
 
 ### Shared Configuration
 
 For system-wide install with shared config:
 ```bash
-sudo mkdir -p /etc/prometheus
-sudo cp ~/.prometheus/config.json /etc/prometheus/
+sudo mkdir -p /etc/kai
+sudo cp ~/.kai/config.json /etc/kai/
 
-# Modify wrapper to use /etc/prometheus
+# Modify wrapper to use /etc/kai
 ```
 
 ---
@@ -349,7 +349,7 @@ sudo cp ~/.prometheus/config.json /etc/prometheus/
 **System Installation:**
 - Files owned by root
 - Readable by all users
-- User data in ~/.prometheus (per user)
+- User data in ~/.kai (per user)
 
 ### Recommendations
 
@@ -371,20 +371,20 @@ sudo cp ~/.prometheus/config.json /etc/prometheus/
 
 ## 🎉 You're All Set!
 
-After installation, Prometheus is available system-wide:
+After installation, Kai is available system-wide:
 
 ```bash
 # From anywhere
-prometheus
+kai
 
 # In any terminal
-prometheus
+kai
 
 # After reboot
-prometheus
+kai
 
 # For all users (if system-wide)
-prometheus
+kai
 ```
 
 **Enjoy your AI-powered terminal assistant!** 🚀

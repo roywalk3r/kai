@@ -24,7 +24,7 @@ def ask_ai(prompt: str) -> Dict[str, any]:
     sys_context.update_cwd()
     
     # Build enhanced system prompt with context
-    system_prompt = f"""You are Kai, an intelligent terminal assistant.
+    system_prompt = f"""You are Prometheus, an intelligent terminal assistant.
 Your job is to translate user requests into valid, *non-interactive* shell commands.
 
 {sys_context.get_context_string()}

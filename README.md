@@ -1,6 +1,8 @@
-# Kai - Intelligent Terminal Assistant 🤖
+# Prometheus - Intelligent Terminal Assistant 🔥
 
-Kai is an AI-powered terminal assistant that translates natural language into shell commands and executes them safely. It uses local LLM (via Ollama) to understand your intent and help you navigate the command line with ease.
+Prometheus is an AI-powered terminal assistant that translates natural language into shell commands and executes them safely. It uses AI (Google Gemini or local Ollama) to understand your intent and help you navigate the command line with ease.
+
+**Note:** During installation, you can set a custom alias (default: `prom`) so you don't have to type "prometheus" every time!
 
 ## Features
 
@@ -16,6 +18,26 @@ Kai is an AI-powered terminal assistant that translates natural language into sh
 
 ## Installation
 
+### Quick Install (Recommended)
+
+**System-wide installation with automatic setup:**
+
+```bash
+git clone https://github.com/roywalk3r/prometheus.git
+cd prometheus
+sudo bash system-install.sh
+```
+
+During installation, you'll:
+1. Be prompted to set a command alias (default: `prom`)
+2. Choose your AI model (Gemini or Ollama)
+3. Set up your Gemini API key (if using Gemini)
+
+After installation, just type your alias:
+```bash
+prom "list my files"
+```
+
 ### Prerequisites
 
 - Python 3.8+
@@ -23,18 +45,18 @@ Kai is an AI-powered terminal assistant that translates natural language into sh
   - **Google Gemini API Key** (Recommended - Free, Fast) - [Get it here](https://aistudio.google.com/apikey)
   - **OR** [Ollama](https://ollama.ai/) with llama3 model (Local, Private)
 
-### Setup
+### Manual Setup (Development)
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/roywalk3r/kai.git
-cd kai
+git clone https://github.com/roywalk3r/prometheus.git
+cd prometheus
 ```
 
 2. Create a virtual environment:
 ```bash
 python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+source .venv/bin/activate
 ```
 
 3. Install dependencies:
@@ -42,29 +64,25 @@ source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-4. **Choose your AI model:**
-
-   **Option A: Gemini (Recommended)**
-   ```bash
-   # Get API key from https://aistudio.google.com/apikey
-   export GEMINI_API_KEY="your-api-key-here"
-   ```
-
-   **Option B: Ollama (Local)**
-   ```bash
-   # Install Ollama from https://ollama.ai/
-   ollama pull llama3
-   ```
-
-   See [GEMINI_SETUP.md](GEMINI_SETUP.md) for detailed setup instructions.
+4. Set up AI model (see [GEMINI_SETUP.md](GEMINI_SETUP.md) for details)
 
 ## Usage
 
-### Basic Usage
+### Quick Commands (One-Shot Mode)
 
-Start Kai:
+Execute commands directly:
 ```bash
-python main.py
+prom "list my files"
+prom "update my system"
+prom "show disk usage"
+prom "find all python files"
+```
+
+### Interactive Mode
+
+Start an interactive session:
+```bash
+prom
 ```
 
 Then interact naturally:
@@ -77,16 +95,23 @@ Then interact naturally:
 
 ### Special Commands
 
-- `exit` or `quit` - Exit Kai
+- `exit` or `quit` - Exit Prometheus
 - `terminate` - Stop currently running command
 - `history` - Show command history
 - `help` - Show help information
 - `config` - Show current configuration
-- `dry-run on/off` - Toggle dry-run mode
+
+### Subcommands
+
+- `prom update` - Update to latest version
+- `prom uninstall` - Uninstall from system
+- `prom config` - Manage configuration
+- `prom history` - Manage command history
+- `prom --version` - Show version
 
 ### Configuration
 
-Edit `~/.kai/config.json` to customize:
+Edit `~/.prometheus/config.json` to customize:
 
 ```json
 {
@@ -123,21 +148,23 @@ Edit `~/.kai/config.json` to customize:
 
 ## Safety Features
 
-Kai includes multiple safety mechanisms:
+Prometheus includes multiple safety mechanisms:
 
 1. **Dangerous Command Detection**: Warns before running potentially destructive commands
 2. **Long-Running Detection**: Alerts for commands that might take a long time
-3. **Auto-Timeout**: Automatically terminates commands after configurable timeout
+3. **Intelligent Timeouts**: Auto-adjusts timeout based on command type
 4. **Confirmation Prompts**: Requires explicit confirmation for risky operations
 5. **Dry-Run Mode**: Preview commands without executing them
+6. **Command Sanitization**: Auto-optimizes commands for script compatibility
 
 ## Architecture
 
 ```
-kai/
+prometheus/
 ├── main.py              # Entry point and main loop
 ├── ai/
-│   ├── model.py        # AI model interface and prompt engineering
+│   ├── model.py        # AI model interface (Gemini + Ollama)
+│   ├── gemini_model.py # Google Gemini integration
 │   └── context.py      # Context management for better AI responses
 ├── core/
 │   ├── executor.py     # Command execution engine
@@ -145,6 +172,8 @@ kai/
 │   └── config.py       # Configuration management
 └── utils/
     ├── safety.py       # Safety checks and validation
+    ├── command_classifier.py  # Intelligent timeout classification
+    ├── command_sanitizer.py   # Command optimization
     └── ui.py           # UI helpers and formatting
 ```
 
@@ -152,7 +181,7 @@ kai/
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-Repository: https://github.com/roywalk3r/kai
+Repository: https://github.com/roywalk3r/prometheus
 
 ## License
 

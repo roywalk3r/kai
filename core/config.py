@@ -1,4 +1,4 @@
-"""Configuration management for Kai."""
+"""Configuration management for Prometheus."""
 
 import json
 import os
@@ -21,10 +21,10 @@ DEFAULT_CONFIG = {
 }
 
 class Config:
-    """Configuration manager for Kai."""
+    """Configuration manager for Prometheus."""
     
     def __init__(self):
-        self.config_dir = Path.home() / ".kai"
+        self.config_dir = Path.home() / ".prometheus"
         self.config_file = self.config_dir / "config.json"
         self.config = self._load_config()
     

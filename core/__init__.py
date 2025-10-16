@@ -1,4 +1,4 @@
-"""Core functionality for Kai terminal assistant."""
+"""Core functionality for Prometheus terminal assistant."""
 
 from .executor import execute_command, terminate_process
 

@@ -1,4 +1,4 @@
-# Prometheus Features Overview
+# Kai Features Overview
 
 ## 🎯 Complete Feature List
 
@@ -51,11 +51,11 @@
 - ✅ Search and filter
 - ✅ Display recent commands
 - ✅ Clear history functionality
-- ✅ History file: ~/.prometheus/history.json
+- ✅ History file: ~/.kai/history.json
 
 ### 5. Configuration System
 - ✅ JSON-based configuration
-- ✅ Configuration file: ~/.prometheus/config.json
+- ✅ Configuration file: ~/.kai/config.json
 - ✅ Runtime configuration changes
 - ✅ Default values with overrides
 - ✅ Configuration persistence
@@ -97,7 +97,7 @@
 - ✅ Ctrl+C handling
 - ✅ EOF handling
 - ✅ Tab completion (via prompt-toolkit)
-- ✅ History file: ~/.prometheus/prompt_history
+- ✅ History file: ~/.kai/prompt_history
 
 ### 8. Special Commands
 - ✅ `exit`, `quit`, `q` - Exit application

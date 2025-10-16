@@ -1,16 +1,16 @@
-# Kai Quick Reference Card
+# Prometheus Quick Reference Card
 
-## 🚀 Starting Kai
+## 🚀 Starting Prometheus
 
 ```bash
 # Activate virtual environment
 source .venv/bin/activate
 
-# Start Kai
+# Start Prometheus
 python main.py
 
 # Or create an alias (add to ~/.bashrc or ~/.zshrc)
-alias kai='cd /path/to/kai && source .venv/bin/activate && python main.py'
+alias prom='cd /path/to/prometheus && source .venv/bin/activate && python main.py'
 ```
 
 ## 💬 Basic Commands
@@ -37,7 +37,7 @@ alias kai='cd /path/to/kai && source .venv/bin/activate && python main.py'
 | `dry-run off` | Disable preview mode |
 | `terminate` | Kill running process |
 | `clear` or `cls` | Clear screen |
-| `exit` or `quit` | Exit Kai |
+| `exit` or `quit` | Exit Prometheus |
 
 ## ⚙️ Configuration Options
 
@@ -56,7 +56,7 @@ alias kai='cd /path/to/kai && source .venv/bin/activate && python main.py'
 
 ## 🛡️ Safety Features
 
-Kai will warn you about:
+Prometheus will warn you about:
 - ⚠️ **Dangerous commands** (rm -rf, dd, mkfs, etc.)
 - ⏳ **Long-running commands** (ping, find /, sleep, etc.)
 - 🚫 **Interactive commands** (nano, vim, top, etc.)
@@ -89,7 +89,7 @@ Kai will warn you about:
 
 ## 🎯 Tips & Tricks
 
-1. **Use context** - Kai remembers recent commands:
+1. **Use context** - Prometheus remembers recent commands:
    ```
    > create a file called notes.txt
    > add "Hello" to it              # "it" refers to notes.txt
@@ -139,7 +139,7 @@ ollama pull llama3
 
 ## 📚 More Help
 
-- Type `help` in Kai for full command list
+- Type `help` in Prometheus for full command list
 - Type `examples` for command examples
 - Read `README.md` for complete documentation
 - Read `QUICKSTART.md` for setup guide
@@ -149,13 +149,13 @@ ollama pull llama3
 - **↑/↓** - Navigate command history
 - **Tab** - Auto-complete (when available)
 - **Ctrl+C** - Cancel current input
-- **Ctrl+D** - Exit Kai
+- **Ctrl+D** - Exit Prometheus
 
 ## 📁 File Locations
 
-- **Config**: `~/.kai/config.json`
-- **History**: `~/.kai/history.json`
-- **Prompt History**: `~/.kai/prompt_history`
+- **Config**: `~/.prometheus/config.json`
+- **History**: `~/.prometheus/history.json`
+- **Prompt History**: `~/.prometheus/prompt_history`
 
 ---
 

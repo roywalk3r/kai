@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Verification script for Kai installation.
+Verification script for Prometheus installation.
 Checks that all components are properly installed and configured.
 """
 
@@ -88,20 +88,20 @@ def check_project_structure():
     
     return all_exist
 
-def check_kai_directory():
-    """Check if ~/.kai directory exists."""
-    kai_dir = Path.home() / '.kai'
-    if kai_dir.exists():
-        print(f"✓ ~/.kai directory exists")
+def check_prometheus_directory():
+    """Check if ~/.prometheus directory exists."""
+    prometheus_dir = Path.home() / '.prometheus'
+    if prometheus_dir.exists():
+        print(f"✓ ~/.prometheus directory exists")
         return True
     else:
-        print(f"ℹ ~/.kai directory will be created on first run")
+        print(f"ℹ ~/.prometheus directory will be created on first run")
         return True
 
 def main():
     """Run all verification checks."""
     print("=" * 50)
-    print("Kai Installation Verification")
+    print("Prometheus Installation Verification")
     print("=" * 50)
     print()
     
@@ -111,7 +111,7 @@ def main():
         ("llama3 Model", check_llama3_model),
         ("Python Dependencies", check_dependencies),
         ("Project Structure", check_project_structure),
-        ("Kai Directory", check_kai_directory),
+        ("Prometheus Directory", check_prometheus_directory),
     ]
     
     results = []
@@ -125,11 +125,11 @@ def main():
     
     if passed == total:
         print(f"✅ All checks passed ({passed}/{total})")
-        print("\nKai is ready to use! Run: python main.py")
+        print("\nPrometheus is ready to use! Run: python main.py")
         return 0
     else:
         print(f"⚠️  {passed}/{total} checks passed")
-        print("\nPlease fix the issues above before running Kai.")
+        print("\nPlease fix the issues above before running Prometheus.")
         
         if not results[1]:  # Ollama check
             print("\nTo install Ollama:")

@@ -1,6 +1,6 @@
-# Kai Quick Start Guide
+# Prometheus Quick Start Guide
 
-Get up and running with Kai in 5 minutes!
+Get up and running with Prometheus in 5 minutes!
 
 ## Prerequisites
 
@@ -27,12 +27,12 @@ brew install ollama
 ollama pull llama3
 ```
 
-### 3. Install Kai
+### 3. Install Prometheus
 
 ```bash
 # Clone the repository
-git clone https://github.com/roywalk3r/kai.git
-cd kai
+git clone https://github.com/roywalk3r/prometheus.git
+cd prometheus
 
 # Run the installation script
 chmod +x install.sh
@@ -50,18 +50,17 @@ pip install -r requirements.txt
 # Activate the virtual environment
 source .venv/bin/activate
 
-# Start Kai
+# Start Prometheus
 python main.py
 ```
 
-You should see the Kai banner:
+You should see the Prometheus banner:
 
 ```
-╔═══════════════════════════════════════╗
-║   🤖 Kai - Terminal Assistant         ║
-║   Type 'help' for commands            ║
-║   Type 'exit' to quit                 ║
-╚═══════════════════════════════════════╝
+    🔥 PROMETHEUS 🔥
+    ━━━━━━━━━━━━━━━━━━━
+    
+    ⚡ IGNITE YOUR TERMINAL ⚡
 ```
 
 ## Try These Commands
@@ -90,7 +89,7 @@ You should see the Kai banner:
 
 ## Configuration
 
-Kai stores its configuration in `~/.kai/config.json`. You can modify settings:
+Prometheus stores its configuration in `~/.prometheus/config.json`. You can modify settings:
 
 ```
 > config                           # Show current config
@@ -100,7 +99,7 @@ Kai stores its configuration in `~/.kai/config.json`. You can modify settings:
 
 ## Safety Features
 
-Kai will warn you before running dangerous commands:
+Prometheus will warn you before running dangerous commands:
 
 ```
 > delete all files
@@ -118,7 +117,7 @@ Are you SURE you want to run this? [y/N]:
    Dry-run mode: Command not executed
    ```
 
-2. **Context awareness** - Kai remembers recent commands:
+2. **Context awareness** - Prometheus remembers recent commands:
    ```
    > create a file called notes.txt
    > add "Hello" to it
@@ -167,11 +166,11 @@ Increase the timeout in config:
 Add this to your `~/.bashrc` or `~/.zshrc` for easy access:
 
 ```bash
-alias kai='cd /path/to/kai && source .venv/bin/activate && python main.py'
+alias prom='cd /path/to/prometheus && source .venv/bin/activate && python main.py'
 ```
 
-Then just type `kai` from anywhere to start!
+Then just type `prom` from anywhere to start!
 
 ---
 
-**Need help?** Type `help` in Kai or open an issue on GitHub.
+**Need help?** Type `help` in Prometheus or open an issue on GitHub.

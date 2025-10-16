@@ -1,5 +1,5 @@
 #!/bin/bash
-# Quick start script for Kai
+# Quick start script for Prometheus
 
 # Get the directory where this script is located
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -31,5 +31,5 @@ fi
 # Activate virtual environment
 source "$SCRIPT_DIR/.venv/bin/activate"
 
-# Start Kai
+# Start Prometheus
 python "$SCRIPT_DIR/main.py"

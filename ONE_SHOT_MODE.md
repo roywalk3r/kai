@@ -1,4 +1,4 @@
-# Kai One-Shot Mode
+# Prometheus One-Shot Mode
 
 ## 🚀 Quick Command Execution
 
@@ -10,55 +10,55 @@ No need to enter interactive mode! Execute commands directly from your shell.
 
 ### Basic Syntax
 ```bash
-kai "your natural language query"
+prometheus "your natural language query"
 ```
 
 ### Examples
 
 #### File Operations
 ```bash
-kai "list my files"
-kai "show hidden files"
-kai "create a file called notes.txt"
-kai "find all python files"
+prometheus "list my files"
+prometheus "show hidden files"
+prometheus "create a file called notes.txt"
+prometheus "find all python files"
 ```
 
 #### System Information
 ```bash
-kai "show disk usage"
-kai "check memory usage"
-kai "what's my IP address"
-kai "show system info"
+prometheus "show disk usage"
+prometheus "check memory usage"
+prometheus "what's my IP address"
+prometheus "show system info"
 ```
 
 #### System Updates
 ```bash
-kai "update my system"
-kai "upgrade all packages"
-kai "install docker"
+prometheus "update my system"
+prometheus "upgrade all packages"
+prometheus "install docker"
 ```
 
 #### File Management
 ```bash
-kai "create a backup of my documents"
-kai "compress the logs folder"
-kai "find large files"
-kai "delete old log files"
+prometheus "create a backup of my documents"
+prometheus "compress the logs folder"
+prometheus "find large files"
+prometheus "delete old log files"
 ```
 
 #### Network Operations
 ```bash
-kai "download https://example.com/file.zip"
-kai "check if port 8080 is open"
-kai "show active connections"
+prometheus "download https://example.com/file.zip"
+prometheus "check if port 8080 is open"
+prometheus "show active connections"
 ```
 
 #### Development
 ```bash
-kai "build the project"
-kai "run tests"
-kai "install dependencies"
-kai "start the server"
+prometheus "build the project"
+prometheus "run tests"
+prometheus "install dependencies"
+prometheus "start the server"
 ```
 
 ---
@@ -67,27 +67,27 @@ kai "start the server"
 
 ### Interactive Mode
 ```bash
-$ kai
+$ prometheus
 ╔═══════════════════════════════════╗
-║ Welcome to Kai!                   ║
+║ Welcome to Prometheus!                   ║
 ╚═══════════════════════════════════╝
 
-kai ❯ list my files
+prometheus ❯ list my files
 ╔═══════════════════════════════════╗
 ║ ⚡ Executing                      ║
 ║ ls -lah                           ║
 ╚═══════════════════════════════════╝
 ...
 
-kai ❯ show disk usage
+prometheus ❯ show disk usage
 ...
 
-kai ❯ exit
+prometheus ❯ exit
 ```
 
 ### One-Shot Mode (NEW!)
 ```bash
-$ kai "list my files"
+$ prometheus "list my files"
 ╔═══════════════════════════════════╗
 ║ Query                             ║
 ║ 💬 list my files                  ║
@@ -99,7 +99,7 @@ $ kai "list my files"
 ╚═══════════════════════════════════╝
 ...
 
-$ kai "show disk usage"
+$ prometheus "show disk usage"
 ...
 ```
 
@@ -116,7 +116,7 @@ $ kai "show disk usage"
 ### With Dry-Run
 Preview what will be executed:
 ```bash
-kai "update my system" --dry-run
+prometheus "update my system" --dry-run
 ```
 
 ### In Scripts
@@ -124,10 +124,10 @@ kai "update my system" --dry-run
 #!/bin/bash
 # Automated backup script
 
-kai "create a backup of /var/www"
+prometheus "create a backup of /var/www"
 if [ $? -eq 0 ]; then
     echo "Backup successful!"
-    kai "compress the backup folder"
+    prometheus "compress the backup folder"
 else
     echo "Backup failed!"
     exit 1
@@ -137,23 +137,23 @@ fi
 ### Chaining Commands
 ```bash
 # Run multiple one-shot commands
-kai "list my files" && kai "show disk usage"
+prometheus "list my files" && prometheus "show disk usage"
 
 # Conditional execution
-kai "find python files" || echo "No Python files found"
+prometheus "find python files" || echo "No Python files found"
 
 # Capture output
-FILES=$(kai "list my files")
+FILES=$(prometheus "list my files")
 echo "Found: $FILES"
 ```
 
 ### With Pipes
 ```bash
-# Use kai output in pipes
-kai "list my files" | grep ".py"
+# Use prometheus output in pipes
+prometheus "list my files" | grep ".py"
 
-# Process kai output
-kai "show system info" | tee system-report.txt
+# Process prometheus output
+prometheus "show system info" | tee system-report.txt
 ```
 
 ---
@@ -163,16 +163,16 @@ kai "show system info" | tee system-report.txt
 ### 1. Alias for Common Tasks
 ```bash
 # Add to ~/.bashrc or ~/.zshrc
-alias kls='kai "list my files"'
-alias kdu='kai "show disk usage"'
-alias kupdate='kai "update my system"'
+alias kls='prometheus "list my files"'
+alias kdu='prometheus "show disk usage"'
+alias kupdate='prometheus "update my system"'
 ```
 
 ### 2. Function Wrappers
 ```bash
 # Smart backup function
 backup() {
-    kai "create a backup of $1"
+    prometheus "create a backup of $1"
 }
 
 # Usage
@@ -182,14 +182,14 @@ backup ~/documents
 ### 3. Cron Jobs
 ```bash
 # Add to crontab
-0 2 * * * /usr/local/bin/kai "backup important files" >> /var/log/backup.log 2>&1
+0 2 * * * /usr/local/bin/prometheus "backup important files" >> /var/log/backup.log 2>&1
 ```
 
 ### 4. Error Handling
 ```bash
-if kai "update my system"; then
+if prometheus "update my system"; then
     echo "✓ System updated"
-    kai "clean package cache"
+    prometheus "clean package cache"
 else
     echo "✗ Update failed"
     exit 1
@@ -202,19 +202,19 @@ fi
 
 ### Normal Output
 ```bash
-kai "list my files"
+prometheus "list my files"
 # Shows full UI with panels
 ```
 
 ### Quiet Mode (Coming Soon)
 ```bash
-kai "list my files" --quiet
+prometheus "list my files" --quiet
 # Shows only command output
 ```
 
 ### JSON Mode (Coming Soon)
 ```bash
-kai "list my files" --json
+prometheus "list my files" --json
 # Returns structured JSON
 ```
 
@@ -226,7 +226,7 @@ kai "list my files" --json
 One-shot mode has the same safety features as interactive mode:
 
 ```bash
-$ kai "delete all files"
+$ prometheus "delete all files"
 ╔═══════════════════════════════════╗
 ║ ⚠️  Warning                       ║
 ║ ⚠️  DANGER!                       ║
@@ -249,33 +249,33 @@ Are you SURE you want to run this? [y/N]:
 
 ### 1. Quick System Checks
 ```bash
-kai "show disk usage"
-kai "check memory"
-kai "list running processes"
+prometheus "show disk usage"
+prometheus "check memory"
+prometheus "list running processes"
 ```
 
 ### 2. Automated Tasks
 ```bash
 # Daily backup script
-kai "backup /home/user/documents to /backup"
-kai "compress /backup"
-kai "delete backups older than 30 days"
+prometheus "backup /home/user/documents to /backup"
+prometheus "compress /backup"
+prometheus "delete backups older than 30 days"
 ```
 
 ### 3. Development Workflow
 ```bash
-kai "install dependencies"
-kai "run tests"
-kai "build for production"
-kai "deploy to server"
+prometheus "install dependencies"
+prometheus "run tests"
+prometheus "build for production"
+prometheus "deploy to server"
 ```
 
 ### 4. System Maintenance
 ```bash
-kai "update my system"
-kai "clean package cache"
-kai "remove old kernels"
-kai "check for errors in logs"
+prometheus "update my system"
+prometheus "clean package cache"
+prometheus "remove old kernels"
+prometheus "check for errors in logs"
 ```
 
 ---
@@ -301,34 +301,34 @@ kai "check for errors in logs"
 
 ### File Operations
 ```bash
-kai "list all files"
-kai "find files modified today"
-kai "show file sizes"
-kai "count files in directory"
+prometheus "list all files"
+prometheus "find files modified today"
+prometheus "show file sizes"
+prometheus "count files in directory"
 ```
 
 ### Text Processing
 ```bash
-kai "search for 'error' in logs"
-kai "replace 'old' with 'new' in file.txt"
-kai "count lines in file.txt"
-kai "show first 10 lines of file.txt"
+prometheus "search for 'error' in logs"
+prometheus "replace 'old' with 'new' in file.txt"
+prometheus "count lines in file.txt"
+prometheus "show first 10 lines of file.txt"
 ```
 
 ### Network
 ```bash
-kai "check internet connection"
-kai "show my public IP"
-kai "test connection to google.com"
-kai "download file from URL"
+prometheus "check internet connection"
+prometheus "show my public IP"
+prometheus "test connection to google.com"
+prometheus "download file from URL"
 ```
 
 ### System
 ```bash
-kai "show system uptime"
-kai "list installed packages"
-kai "check disk health"
-kai "show CPU usage"
+prometheus "show system uptime"
+prometheus "list installed packages"
+prometheus "check disk health"
+prometheus "show CPU usage"
 ```
 
 ---
@@ -353,9 +353,9 @@ kai "show CPU usage"
 
 ---
 
-**One-shot mode makes Kai even more powerful and flexible!** 🎉
+**One-shot mode makes Prometheus even more powerful and flexible!** 🎉
 
 Try it now:
 ```bash
-kai "show me something cool"
+prometheus "show me something cool"
 ```

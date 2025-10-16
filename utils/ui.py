@@ -1,4 +1,4 @@
-"""UI helpers and formatting for Kai."""
+"""UI helpers and formatting for Prometheus."""
 
 from rich.console import Console
 from rich.panel import Panel
@@ -11,32 +11,59 @@ from typing import Optional
 console = Console()
 
 def print_banner():
-    """Print the Kai welcome banner."""
+    """Print the Prometheus welcome banner."""
     from rich.panel import Panel
     from rich.text import Text
     from rich import box
     from rich.align import Align
     
-    # Enhanced ASCII art logo with gradient effect
+    # Prometheus ASCII art with fire theme
     logo = Text()
-    logo.append("\n    ██╗  ██╗", style="bold bright_cyan")
-    logo.append(" █████╗ ", style="bold cyan")
-    logo.append("██╗\n", style="bold blue")
-    logo.append("    ██║ ██╔╝", style="bold bright_cyan")
-    logo.append("██╔══██╗", style="bold cyan")
-    logo.append("██║\n", style="bold blue")
-    logo.append("    █████╔╝ ", style="bold cyan")
-    logo.append("███████║", style="bold bright_cyan")
-    logo.append("██║\n", style="bold blue")
-    logo.append("    ██╔═██╗ ", style="bold cyan")
-    logo.append("██╔══██║", style="bold blue")
-    logo.append("██║\n", style="bold bright_blue")
-    logo.append("    ██║  ██╗", style="bold blue")
-    logo.append("██║  ██║", style="bold cyan")
-    logo.append("██║\n", style="bold bright_cyan")
-    logo.append("    ╚═╝  ╚═╝", style="dim cyan")
-    logo.append("╚═╝  ╚═╝", style="dim blue")
-    logo.append("╚═╝\n", style="dim bright_blue")
+    logo.append("\n", style="")
+    logo.append("    ╔═══════════════════════════════════╗\n", style="bold bright_red")
+    logo.append("    ║                                   ║\n", style="bold red")
+    logo.append("    ║     ", style="bold red")
+    logo.append("▓", style="bold bright_yellow on bright_yellow")
+    logo.append("▓▓", style="bold bright_red on bright_red")
+    logo.append("▓", style="bold bright_yellow on bright_yellow")
+    logo.append("           ", style="")
+    logo.append("▓", style="bold bright_yellow on bright_yellow")
+    logo.append("▓▓", style="bold bright_red on bright_red")
+    logo.append("▓", style="bold bright_yellow on bright_yellow")
+    logo.append("     ║\n", style="bold red")
+    logo.append("    ║    ", style="bold red")
+    logo.append("▓▓", style="bold bright_red on bright_red")
+    logo.append("███", style="bold bright_white on red")
+    logo.append("▓▓", style="bold bright_red on bright_red")
+    logo.append("       ", style="")
+    logo.append("▓▓", style="bold bright_red on bright_red")
+    logo.append("███", style="bold bright_white on red")
+    logo.append("▓▓", style="bold bright_red on bright_red")
+    logo.append("    ║\n", style="bold red")
+    logo.append("    ║       ", style="bold red")
+    logo.append("███", style="bold bright_white on red")
+    logo.append("       ", style="")
+    logo.append("███", style="bold bright_white on red")
+    logo.append("       ║\n", style="bold red")
+    logo.append("    ║        ", style="bold red")
+    logo.append("█", style="bold red")
+    logo.append("         ", style="")
+    logo.append("█", style="bold red")
+    logo.append("        ║\n", style="bold red")
+    logo.append("    ║   ", style="bold red")
+    logo.append("╔═══════════════════════╗", style="bold bright_yellow")
+    logo.append("   ║\n", style="bold red")
+    logo.append("    ║   ║ ", style="bold red")
+    logo.append("P R O M E T H E U S", style="bold bright_white on red")
+    logo.append(" ║   ║\n", style="bold red")
+    logo.append("    ║   ", style="bold red")
+    logo.append("╚═══════════════════════╝", style="bold bright_yellow")
+    logo.append("   ║\n", style="bold red")
+    logo.append("    ║                                   ║\n", style="bold red")
+    logo.append("    ╚═══════════════════════════════════╝\n", style="bold bright_red")
+    logo.append("          ", style="")
+    logo.append("⚡ IGNITE YOUR TERMINAL ⚡", style="italic bright_yellow blink")
+    logo.append("\n", style="")
     
     # Create styled content
     content = Text()
@@ -99,7 +126,7 @@ def print_first_time_welcome():
     greeting_text.append(f"{emoji} ", style=color)
     greeting_text.append(greeting, style=f"bold {color}")
     greeting_text.append("! Welcome to ", style="bold white")
-    greeting_text.append("Kai", style="bold bright_cyan")
+    greeting_text.append("Prometheus", style="bold bright_red")
     greeting_text.append("!", style="bold white")
     
     console.print()
@@ -193,7 +220,7 @@ def print_first_time_welcome():
 def print_help():
     """Print help information."""
     help_text = """
-# Kai Commands
+# Prometheus Commands
 
 ## Natural Language
 Just describe what you want to do:
@@ -203,7 +230,7 @@ Just describe what you want to do:
 - "find all python files"
 
 ## Special Commands
-- **exit/quit/q** - Exit Kai
+- **exit/quit/q** - Exit Prometheus
 - **terminate** - Stop currently running command
 - **history [n]** - Show last n commands (default: 10)
 - **clear-history** - Clear command history
@@ -285,7 +312,7 @@ def print_ai_response(message: str):
             response_text,
             border_style="bright_cyan",
             padding=(1, 2),
-            title="[bold bright_cyan]Kai[/bold bright_cyan]",
+            title="[bold bright_cyan]Prometheus[/bold bright_cyan]",
             title_align="left"
         )
         console.print(panel)
@@ -295,7 +322,7 @@ def print_ai_response(message: str):
             Markdown(message),
             border_style="bright_cyan",
             padding=(1, 2),
-            title="[bold bright_cyan]💬 Kai[/bold bright_cyan]",
+            title="[bold bright_cyan]💬 Prometheus[/bold bright_cyan]",
             title_align="left"
         )
         console.print(panel)

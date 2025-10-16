@@ -1,14 +1,14 @@
-# Kai Terminal Assistant - Project Summary
+# Prometheus Terminal Assistant - Project Summary
 
 ## Overview
 
-Kai is a complete, production-ready AI-powered terminal assistant that translates natural language into shell commands and executes them safely. Built with Python and leveraging local LLM inference via Ollama.
+Prometheus is a complete, production-ready AI-powered terminal assistant that translates natural language into shell commands and executes them safely. Built with Python and leveraging local LLM inference via Ollama.
 
 ## Project Statistics
 
 ### Code Structure
 ```
-kai/
+prometheus/
 ├── ai/                  # AI model and context management (2 modules)
 │   ├── model.py        # Main AI interface with enhanced prompts
 │   └── context.py      # System and conversation context tracking
@@ -53,7 +53,7 @@ kai/
 - Prompt history with auto-suggestions
 
 #### ⚙️ Configuration System
-- JSON-based configuration (~/.kai/config.json)
+- JSON-based configuration (~/.prometheus/config.json)
 - Runtime configuration changes
 - Default values with override support
 - Configurable options:
@@ -199,7 +199,7 @@ $ find . -name "*.py" -type f
 
 ## Conclusion
 
-Kai v1.0.0 is a **complete, production-ready terminal assistant** with:
+Prometheus v1.0.0 is a **complete, production-ready terminal assistant** with:
 - ✅ Robust safety features
 - ✅ Excellent user experience
 - ✅ Comprehensive documentation

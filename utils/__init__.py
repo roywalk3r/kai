@@ -1,1 +1,1 @@
-"""Utility modules for Kai terminal assistant."""
+"""Utility modules for Prometheus terminal assistant."""

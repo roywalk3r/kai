@@ -48,7 +48,7 @@ if grep -q "export GEMINI_API_KEY" "$CONFIG_FILE" 2>/dev/null; then
 else
     echo "Adding API key to $CONFIG_FILE..."
     echo "" >> "$CONFIG_FILE"
-    echo "# Kai - Gemini API Key" >> "$CONFIG_FILE"
+    echo "# Prometheus - Gemini API Key" >> "$CONFIG_FILE"
     echo "export GEMINI_API_KEY=\"$API_KEY\"" >> "$CONFIG_FILE"
     echo "✓ Added to $CONFIG_FILE"
 fi
@@ -60,7 +60,7 @@ echo "Next steps:"
 echo "  1. Reload your shell config:"
 echo "     source $CONFIG_FILE"
 echo ""
-echo "  2. Test Kai:"
-echo "     kai"
+echo "  2. Test Prometheus:"
+echo "     prom"
 echo ""
 echo "You should see: 🤖 Using Gemini AI (Google)"

@@ -1,11 +1,11 @@
-# Contributing to Prometheus
+# Contributing to Kai
 
-Thank you for your interest in contributing to Prometheus! This document provides guidelines and instructions for contributing.
+Thank you for your interest in contributing to Kai! This document provides guidelines and instructions for contributing.
 
 ## Getting Started
 
 1. Fork the repository
-2. Clone your fork: `git clone https://github.com/yourusername/prometheus.git`
+2. Clone your fork: `git clone https://github.com/yourusername/kai.git`
 3. Create a virtual environment: `python -m venv .venv`
 4. Activate it: `source .venv/bin/activate` (Linux/Mac) or `.venv\Scripts\activate` (Windows)
 5. Install dependencies: `pip install -r requirements.txt`
@@ -40,7 +40,7 @@ Thank you for your interest in contributing to Prometheus! This document provide
 ## Project Structure
 
 ```
-prometheus/
+kai/
 ├── ai/              # AI model and context management
 ├── core/            # Core functionality (executor, config, history)
 ├── utils/           # Utility modules (safety, UI)
@@ -60,7 +60,7 @@ When adding a new feature:
 
 ## Safety Considerations
 
-Prometheus executes shell commands, so safety is paramount:
+Kai executes shell commands, so safety is paramount:
 
 - Always validate user input
 - Check commands for dangerous patterns
@@ -74,7 +74,7 @@ When reporting bugs, include:
 
 - Operating system and version
 - Python version
-- Prometheus version
+- Kai version
 - Steps to reproduce
 - Expected vs actual behavior
 - Error messages and logs
@@ -92,4 +92,4 @@ For feature requests:
 
 Feel free to open an issue for questions or join our discussions.
 
-Thank you for contributing to Prometheus! 🤖
+Thank you for contributing to Kai! 🤖

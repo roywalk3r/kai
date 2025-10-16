@@ -1,4 +1,4 @@
-# Prometheus UI Improvements
+# Kai UI Improvements
 
 ## 🎨 Visual Enhancements
 
@@ -63,9 +63,9 @@ Centered, professional layout
 
 **After:**
 ```
-prometheus ❯
+kai ❯
 ```
-- **Styled**: "prometheus" in bright cyan, bold
+- **Styled**: "kai" in bright cyan, bold
 - **Arrow**: Yellow ❯ symbol
 - **Professional**: Looks like modern CLI tools
 

@@ -2,7 +2,7 @@
 
 ## 🚀 Quick Start
 
-Kai now supports **Google Gemini AI** as the primary AI model! It's faster, more accurate, and works from anywhere.
+Prometheus now supports **Google Gemini AI** as the primary AI model! It's faster, more accurate, and works from anywhere.
 
 ---
 
@@ -68,12 +68,12 @@ $env:GEMINI_API_KEY="your-api-key-here"
 
 ### Option 2: .env File (Alternative)
 
-Create a `.env` file in the Kai directory:
+Create a `.env` file in the Prometheus directory:
 ```bash
 GEMINI_API_KEY=your-api-key-here
 ```
 
-Then load it before starting Kai:
+Then load it before starting Prometheus:
 ```bash
 source .env
 python main.py
@@ -85,7 +85,7 @@ python main.py
 
 ### Check if Gemini is Active
 
-Start Kai and look for:
+Start Prometheus and look for:
 ```
 🤖 Using Gemini AI (Google)
 ```
@@ -201,7 +201,7 @@ echo $GEMINI_API_KEY
 # If empty, set it
 export GEMINI_API_KEY="your-key-here"
 
-# Restart Kai
+# Restart Prometheus
 python main.py
 ```
 
@@ -243,7 +243,7 @@ Visit: https://aistudio.google.com/
 
 ### Change Gemini Model
 
-Edit `~/.kai/config.json`:
+Edit `~/.prometheus/config.json`:
 ```json
 {
   "use_gemini": true,
@@ -259,10 +259,10 @@ Available models:
 ### Disable Gemini Temporarily
 
 ```bash
-# In Kai
+# In Prometheus
 > config set use_gemini false
 
-# Restart Kai to use Ollama
+# Restart Prometheus to use Ollama
 ```
 
 ---
@@ -278,7 +278,7 @@ export GEMINI_API_KEY="AIzaSyD..."
 # 3. Install google-genai package
 pip install google-genai
 
-# 4. Start Kai
+# 4. Start Prometheus
 python main.py
 
 # 5. Verify
@@ -295,7 +295,7 @@ python main.py
 ## 📞 Support
 
 ### Getting Help
-- Check error messages in Kai
+- Check error messages in Prometheus
 - Review this guide
 - Visit Google AI Studio docs: https://ai.google.dev/
 
@@ -308,7 +308,7 @@ python main.py
 
 ## 🎉 You're All Set!
 
-Once configured, Kai will automatically use Gemini for all AI requests. Enjoy faster, smarter command generation!
+Once configured, Prometheus will automatically use Gemini for all AI requests. Enjoy faster, smarter command generation!
 
 **Need to switch back to Ollama?** Just run:
 ```

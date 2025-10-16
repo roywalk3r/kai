@@ -1,9 +1,9 @@
 #!/bin/bash
-# Installation script for Kai terminal assistant
+# Installation script for Prometheus terminal assistant
 
 set -e
 
-echo "🤖 Installing Kai Terminal Assistant..."
+echo "🔥 Installing Prometheus Terminal Assistant..."
 
 # Check Python version
 if ! command -v python3 &> /dev/null; then
@@ -67,7 +67,7 @@ echo """
 """
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
-echo "Kai supports two AI models:"
+echo "Prometheus supports two AI models:"
 echo "  1. Gemini (Google) - Fast, accurate, cloud-based (Recommended)"
 echo "  2. Ollama - Local, private, offline"
 echo ""
@@ -75,7 +75,7 @@ echo ""
 # Check if Gemini API key already exists
 if [ -n "$GEMINI_API_KEY" ]; then
     echo "✓ Gemini API key already set"
-    echo "  Kai will use Gemini AI (Google)"
+    echo "  Prometheus will use Gemini AI (Google)"
 else
     echo "Would you like to use Gemini AI? (Recommended)"
     read -p "Enter your choice [Y/n]: " use_gemini
@@ -103,7 +103,7 @@ else
             
             if [ -n "$SHELL_CONFIG" ]; then
                 echo "" >> "$SHELL_CONFIG"
-                echo "# Kai - Gemini API Key" >> "$SHELL_CONFIG"
+                echo "# Prometheus - Gemini API Key" >> "$SHELL_CONFIG"
                 echo "export GEMINI_API_KEY=\"$api_key\"" >> "$SHELL_CONFIG"
                 
                 # Also set for current session
@@ -111,7 +111,7 @@ else
                 
                 echo ""
                 echo "✅ Gemini API key saved to $SHELL_CONFIG"
-                echo "   Kai will use Gemini AI (Google)"
+                echo "   Prometheus will use Gemini AI (Google)"
             else
                 echo ""
                 echo "⚠️  Could not find shell config file"
@@ -121,12 +121,12 @@ else
         else
             echo ""
             echo "ℹ️  Skipping Gemini setup"
-            echo "   Kai will use Ollama (local AI) by default"
+            echo "   Prometheus will use Ollama (local AI) by default"
             echo ""
             echo "   To use Gemini later:"
             echo "   1. Get API key: https://aistudio.google.com/apikey"
             echo "   2. export GEMINI_API_KEY=\"your-key-here\""
-            echo "   3. Restart Kai"
+            echo "   3. Restart Prometheus"
         fi
     else
         echo ""
@@ -137,15 +137,15 @@ else
     fi
 fi
 
-# Create .kai directory
-mkdir -p ~/.kai
+# Create .prometheus directory
+mkdir -p ~/.prometheus
 
 echo ""
 echo "✅ Installation complete!"
 echo ""
 
 # Check if API key was just added
-if grep -q "# Kai - Gemini API Key" "$HOME/.bashrc" 2>/dev/null || grep -q "# Kai - Gemini API Key" "$HOME/.zshrc" 2>/dev/null; then
+if grep -q "# Prometheus - Gemini API Key" "$HOME/.bashrc" 2>/dev/null || grep -q "# Prometheus - Gemini API Key" "$HOME/.zshrc" 2>/dev/null; then
     echo "⚠️  IMPORTANT: Reload your shell configuration to activate Gemini:"
     if [ -f "$HOME/.bashrc" ]; then
         echo "  source ~/.bashrc"
@@ -157,7 +157,7 @@ if grep -q "# Kai - Gemini API Key" "$HOME/.bashrc" 2>/dev/null || grep -q "# Ka
     echo ""
 fi
 
-echo "To start Kai, run:"
+echo "To start Prometheus, run:"
 echo ""
 echo "Option 1 (Easiest - auto-loads API key):"
 echo "  ./start.sh"
@@ -167,4 +167,4 @@ echo "  source .venv/bin/activate"
 echo "  python main.py"
 echo ""
 echo "Or add an alias to your shell config:"
-echo "  alias kai='$(pwd)/start.sh'"
+echo "  alias prom='$(pwd)/start.sh'"

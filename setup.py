@@ -1,4 +1,4 @@
-"""Setup script for Kai terminal assistant."""
+"""Setup script for Prometheus terminal assistant."""
 
 from setuptools import setup, find_packages
 
@@ -6,13 +6,13 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
-    name="kai-terminal",
+    name="prometheus-terminal",
     version="1.0.0",
-    author="Kai Development Team",
+    author="Prometheus Development Team",
     description="An AI-powered terminal assistant",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/yourusername/kai",
+    url="https://github.com/roywalk3r/prometheus",
     packages=find_packages(),
     classifiers=[
         "Development Status :: 4 - Beta",
@@ -33,7 +33,7 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            "kai=main:main",
+            "prometheus=main:main",
         ],
     },
 )

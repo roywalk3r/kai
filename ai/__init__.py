@@ -1,4 +1,4 @@
-"""AI module for Kai terminal assistant."""
+"""AI module for Prometheus terminal assistant."""
 
 from .model import ask_ai
 

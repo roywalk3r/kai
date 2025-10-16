@@ -1,5 +1,5 @@
 #!/bin/bash
-# System-wide installation script for Kai Terminal Assistant
+# System-wide installation script for Prometheus Terminal Assistant
 
 set -e
 
@@ -11,18 +11,18 @@ CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
 echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo -e "${CYAN}🤖 Kai Terminal Assistant - System Installer${NC}"
+echo -e "${CYAN}🔥 Prometheus Terminal Assistant - Installer${NC}"
 echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo ""
 
 # Check if running with sudo for system-wide install
-INSTALL_DIR="$HOME/.local/share/kai"
+INSTALL_DIR="$HOME/.local/share/prometheus"
 BIN_DIR="$HOME/.local/bin"
 SYSTEM_INSTALL=false
 
 if [ "$EUID" -eq 0 ]; then
     echo -e "${YELLOW}Running as root. Installing system-wide...${NC}"
-    INSTALL_DIR="/opt/kai"
+    INSTALL_DIR="/opt/prometheus"
     BIN_DIR="/usr/local/bin"
     SYSTEM_INSTALL=true
 else
@@ -76,17 +76,31 @@ echo -e "${CYAN}Installing dependencies...${NC}"
 .venv/bin/pip install --upgrade pip -q
 .venv/bin/pip install -r requirements.txt -q
 
-# Create executable wrapper script
-echo -e "${CYAN}Creating executable wrapper...${NC}"
-cat > "$BIN_DIR/kai" << 'WRAPPER_EOF'
-#!/bin/bash
-# Kai Terminal Assistant Wrapper
+echo ""
+echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "${CYAN}⚡ Command Alias Setup${NC}"
+echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo ""
+echo "Typing 'prometheus' every time can be tedious."
+echo "Let's set up a shorter alias for you!"
+echo ""
+read -p "Enter command alias [default: prom]: " cmd_alias
+cmd_alias=${cmd_alias:-prom}
+echo ""
+echo -e "${GREEN}✓ Will create alias: ${CYAN}$cmd_alias${NC}"
 
-# Get the directory where Kai is installed
-if [ -d "/opt/kai" ]; then
-    KAI_DIR="/opt/kai"
+# Create executable wrapper script
+echo ""
+echo -e "${CYAN}Creating executable wrapper...${NC}"
+cat > "$BIN_DIR/$cmd_alias" << 'WRAPPER_EOF'
+#!/bin/bash
+# Prometheus Terminal Assistant Wrapper
+
+# Get the directory where Prometheus is installed
+if [ -d "/opt/prometheus" ]; then
+    PROMETHEUS_DIR="/opt/prometheus"
 else
-    KAI_DIR="$HOME/.local/share/kai"
+    PROMETHEUS_DIR="$HOME/.local/share/prometheus"
 fi
 
 # Load environment variables from shell configs
@@ -113,19 +127,19 @@ if [ -z "$GEMINI_API_KEY" ]; then
     fi
 fi
 
-# Activate virtual environment and run Kai
-source "$KAI_DIR/.venv/bin/activate"
-python "$KAI_DIR/main.py" "$@"
+# Activate virtual environment and run Prometheus
+source "$PROMETHEUS_DIR/.venv/bin/activate"
+python "$PROMETHEUS_DIR/main.py" "$@"
 WRAPPER_EOF
 
-chmod +x "$BIN_DIR/kai"
+chmod +x "$BIN_DIR/$cmd_alias"
 
 echo ""
 echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo -e "${CYAN}🤖 AI Model Setup${NC}"
 echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo ""
-echo "Kai supports two AI models:"
+echo "Prometheus supports two AI models:"
 echo "  1. Gemini (Google) - Fast, accurate, cloud-based (Recommended)"
 echo "  2. Ollama - Local, private, offline"
 echo ""
@@ -133,7 +147,7 @@ echo ""
 # Check if Gemini API key already exists
 if [ -n "$GEMINI_API_KEY" ]; then
     echo -e "${GREEN}✓ Gemini API key already set${NC}"
-    echo "  Kai will use Gemini AI (Google)"
+    echo "  Prometheus will use Gemini AI (Google)"
 else
     read -p "Would you like to use Gemini AI? [Y/n]: " use_gemini
     
@@ -177,13 +191,13 @@ else
                             sed -i "/GEMINI_API_KEY/d" "$SHELL_CONFIG"
                         fi
                         echo "" >> "$SHELL_CONFIG"
-                        echo "# Kai - Gemini API Key" >> "$SHELL_CONFIG"
+                        echo "# Prometheus - Gemini API Key" >> "$SHELL_CONFIG"
                         echo "export GEMINI_API_KEY=\"$api_key\"" >> "$SHELL_CONFIG"
                         echo -e "${GREEN}✅ Gemini API key updated in $SHELL_CONFIG${NC}"
                     fi
                 else
                     echo "" >> "$SHELL_CONFIG"
-                    echo "# Kai - Gemini API Key" >> "$SHELL_CONFIG"
+                    echo "# Prometheus - Gemini API Key" >> "$SHELL_CONFIG"
                     echo "export GEMINI_API_KEY=\"$api_key\"" >> "$SHELL_CONFIG"
                     echo -e "${GREEN}✅ Gemini API key saved to $SHELL_CONFIG${NC}"
                 fi
@@ -191,7 +205,7 @@ else
                 # Also set for current session
                 export GEMINI_API_KEY="$api_key"
                 
-                echo "   Kai will use Gemini AI (Google)"
+                echo "   Prometheus will use Gemini AI (Google)"
             else
                 echo -e "${YELLOW}⚠️  Could not find shell config file${NC}"
                 echo "   Please manually add to your shell config:"
@@ -200,7 +214,7 @@ else
         else
             echo ""
             echo -e "${YELLOW}ℹ️  Skipping Gemini setup${NC}"
-            echo "   Kai will use Ollama (local AI) by default"
+            echo "   Prometheus will use Ollama (local AI) by default"
         fi
     else
         echo ""
@@ -209,8 +223,8 @@ else
     fi
 fi
 
-# Create .kai directory for user data
-mkdir -p "$HOME/.kai"
+# Create .prometheus directory for user data
+mkdir -p "$HOME/.prometheus"
 
 echo ""
 echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
@@ -219,7 +233,8 @@ echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━
 echo ""
 echo "📍 Installation Details:"
 echo "   • Installed to: $INSTALL_DIR"
-echo "   • Executable: $BIN_DIR/kai"
+echo "   • Executable: $BIN_DIR/$cmd_alias"
+echo "   • Command: ${CYAN}$cmd_alias${NC}"
 if [ "$SYSTEM_INSTALL" = true ]; then
     echo "   • Type: System-wide (all users)"
 else
@@ -237,7 +252,7 @@ if [[ ":$PATH:" != *":$BIN_DIR:"* ]]; then
 fi
 
 # Remind to reload shell config if API key was added
-if grep -q "# Kai - Gemini API Key" "$HOME/.bashrc" 2>/dev/null || grep -q "# Kai - Gemini API Key" "$HOME/.zshrc" 2>/dev/null; then
+if grep -q "# Prometheus - Gemini API Key" "$HOME/.bashrc" 2>/dev/null || grep -q "# Prometheus - Gemini API Key" "$HOME/.zshrc" 2>/dev/null; then
     echo -e "${YELLOW}⚠️  IMPORTANT: Reload your shell configuration:${NC}"
     if [ -f "$HOME/.bashrc" ]; then
         echo "   source ~/.bashrc"
@@ -249,11 +264,11 @@ if grep -q "# Kai - Gemini API Key" "$HOME/.bashrc" 2>/dev/null || grep -q "# Ka
     echo ""
 fi
 
-echo "🚀 To start Kai, simply type:"
-echo -e "   ${CYAN}kai${NC}"
+echo "🚀 To start Prometheus, simply type:"
+echo -e "   ${CYAN}$cmd_alias${NC}"
 echo ""
 echo "📚 For help, type:"
-echo -e "   ${CYAN}kai --help${NC}"
+echo -e "   ${CYAN}$cmd_alias --help${NC}"
 echo ""
 echo "🎉 Enjoy your AI-powered terminal assistant!"
 echo ""

@@ -34,7 +34,7 @@ env/
 *~
 
 # Kai specific
-.prometheus/
+.kai/
 *.log
 test
 test.*
