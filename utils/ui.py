@@ -264,6 +264,11 @@ Just describe what you want to do:
 - **status** - Show quick directory status
 - **ref/reference** - Show context-relevant commands
 
+## AI Model Management 🆕
+- **model** - Show current AI model
+- **use gemini** - Switch to Google Gemini AI
+- **use ollama** - Switch to local Ollama
+
 ## Configuration
 - **config** - Show current configuration
 - **config set <key> <value>** - Set configuration value

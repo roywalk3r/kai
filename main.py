@@ -80,6 +80,62 @@ def handle_special_command(query: str) -> bool:
             print_success("History cleared")
         return True
     
+    # Model switching commands
+    elif query in ["use gemini", "use-gemini", "switch gemini", "model gemini"]:
+        config.set("use_gemini", True)
+        config.save()
+        from rich.panel import Panel
+        console.print(Panel(
+            "[bold green]✓ Switched to Gemini AI[/bold green]\n\n"
+            "[bright_white]Using Google's Gemini 2.0 Flash[/bright_white]\n"
+            "[dim]Requires: GEMINI_API_KEY environment variable[/dim]",
+            border_style="green",
+            title="[bold]AI Model[/bold]"
+        ))
+        return True
+    
+    elif query in ["use ollama", "use-ollama", "switch ollama", "model ollama"]:
+        config.set("use_gemini", False)
+        config.save()
+        from rich.panel import Panel
+        console.print(Panel(
+            "[bold green]✓ Switched to Ollama[/bold green]\n\n"
+            "[bright_white]Using local Ollama with llama3[/bright_white]\n"
+            "[dim]Requires: Ollama running on localhost:11434[/dim]",
+            border_style="green",
+            title="[bold]AI Model[/bold]"
+        ))
+        return True
+    
+    elif query in ["model", "which model", "current model", "ai model"]:
+        from rich.panel import Panel
+        use_gemini = config.get("use_gemini", True)
+        
+        # Check if actually available
+        from ai.gemini_model import is_gemini_available
+        gemini_available = is_gemini_available()
+        
+        if use_gemini:
+            if gemini_available:
+                status = "[bold green]Gemini AI (Active)[/bold green]"
+                details = "[bright_white]✓ Connected to Google Gemini 2.0 Flash[/bright_white]"
+            else:
+                status = "[bold yellow]Gemini AI (Configured but not available)[/bold yellow]"
+                details = "[yellow]⚠ GEMINI_API_KEY not set - falling back to Ollama[/yellow]"
+        else:
+            status = "[bold green]Ollama (Active)[/bold green]"
+            details = "[bright_white]✓ Using local llama3 model[/bright_white]"
+        
+        console.print(Panel(
+            f"{status}\n\n{details}\n\n"
+            "[dim]Switch model:[/dim]\n"
+            "[cyan]• use gemini[/cyan] - Google's Gemini AI\n"
+            "[cyan]• use ollama[/cyan] - Local Ollama",
+            border_style="cyan",
+            title="[bold]Current AI Model[/bold]"
+        ))
+        return True
+    
     # Configuration commands
     elif query == "config":
         console.print(config.display())
