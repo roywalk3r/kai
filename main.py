@@ -297,7 +297,7 @@ def handle_special_command(query: str) -> bool:
         return True
     
     # Plugin commands
-    elif query.startswith("plugin "):
+    elif query == "plugin" or query.startswith("plugin "):
         parts = query.split()
         if len(parts) < 2:
             print_error("Usage: plugin [list|install|uninstall|create] [name]")
@@ -321,7 +321,7 @@ def handle_special_command(query: str) -> bool:
         return True
     
     # Alias commands
-    elif query.startswith("alias "):
+    elif query == "alias" or query.startswith("alias "):
         from utils.aliases import show_aliases_table, add_alias, remove_alias, list_aliases, get_alias_manager
         parts = query.split(maxsplit=2)
         
@@ -357,7 +357,7 @@ def handle_special_command(query: str) -> bool:
         return True
     
     # Cache commands
-    elif query.startswith("cache "):
+    elif query == "cache" or query.startswith("cache "):
         from utils.cache import show_cache_stats, get_response_cache
         parts = query.split()
         
@@ -388,7 +388,7 @@ def handle_special_command(query: str) -> bool:
         return True
     
     # Template commands
-    elif query.startswith("template "):
+    elif query == "template" or query.startswith("template "):
         from utils.templates import show_templates, show_template_details, use_template, create_template, get_template_manager
         parts = query.split(maxsplit=2)
         
@@ -428,7 +428,7 @@ def handle_special_command(query: str) -> bool:
         return True
     
     # Workflow commands
-    elif query.startswith("workflow "):
+    elif query == "workflow" or query.startswith("workflow "):
         from utils.workflows import show_workflows, show_workflow_details, get_workflow_manager, WorkflowExecutor
         parts = query.split(maxsplit=2)
         
@@ -470,7 +470,7 @@ def handle_special_command(query: str) -> bool:
         return True
     
     # Remote execution commands
-    elif query.startswith("remote "):
+    elif query == "remote" or query.startswith("remote "):
         from utils.remote_exec import show_remote_hosts, execute_remote_command, get_remote_executor
         parts = query.split(maxsplit=3)
         
@@ -516,7 +516,7 @@ def handle_special_command(query: str) -> bool:
         return True
     
     # Session commands
-    elif query.startswith("session "):
+    elif query == "session" or query.startswith("session "):
         from core.session import show_session_info, get_session_context
         parts = query.split()
         
