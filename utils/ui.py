@@ -343,6 +343,23 @@ Just describe what you want to do:
 - **favorite remove <name>** - Remove favorite
 - **fav <name>** - Run favorite command
 
+## Environment Variables 🌍 NEW
+- **env** or **env list** - List all environment variables
+- **env set <key> <value>** - Set environment variable
+- **env get <key>** - Get variable value
+- **env load <name>** - Load from .env file
+- **env save <name>** - Save to .env file
+
+## Export/Import 💾 NEW
+- **export <filename>** - Export all configurations
+- **import <filename>** - Import configurations
+- Exports: config, aliases, templates, workflows, bookmarks, favorites
+
+## Multi-line Builder 📝 NEW
+- **multiline** - Build multi-line command interactively
+- Combines commands with && automatically
+- Shows preview before execution
+
 ## Configuration Options
 - **timeout_seconds** - Command timeout (default: 20)
 - **default_model** - AI model to use (default: llama3)

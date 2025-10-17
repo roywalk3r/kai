@@ -468,6 +468,106 @@ def handle_special_command(query: str) -> bool:
             print_error(f"Favorite '{name}' not found")
             return True
     
+    # Environment variables
+    elif query == "env" or query == "env list":
+        from utils.advanced_tools import show_environment
+        show_environment(filter_prometheus=False)
+        return True
+    
+    elif query.startswith("env set "):
+        from utils.advanced_tools import get_env_manager
+        parts = query.split(maxsplit=3)
+        if len(parts) < 4:
+            print_error("Usage: env set <key> <value>")
+            return True
+        
+        key, value = parts[2], parts[3].strip('"\'')
+        manager = get_env_manager()
+        manager.set(key, value)
+        print_success(f"Set {key}={value}")
+        return True
+    
+    elif query.startswith("env get "):
+        from utils.advanced_tools import get_env_manager
+        key = query.split(maxsplit=2)[2]
+        manager = get_env_manager()
+        value = manager.get(key)
+        
+        if value:
+            console.print(f"[cyan]{key}[/cyan]=[bright_white]{value}[/bright_white]")
+        else:
+            print_warning(f"Variable '{key}' not set")
+        return True
+    
+    elif query.startswith("env load "):
+        from utils.advanced_tools import get_env_manager
+        env_name = query.split(maxsplit=2)[2]
+        manager = get_env_manager()
+        
+        if manager.load_from_file(env_name):
+            print_success(f"Loaded environment: {env_name}")
+        else:
+            print_error(f"Environment '{env_name}' not found")
+        return True
+    
+    elif query.startswith("env save "):
+        from utils.advanced_tools import get_env_manager
+        env_name = query.split(maxsplit=2)[2] if len(query.split()) > 2 else "default"
+        manager = get_env_manager()
+        manager.save_to_file(env_name)
+        print_success(f"Saved environment: {env_name}")
+        return True
+    
+    # Export/Import configurations
+    elif query.startswith("export "):
+        from utils.advanced_tools import get_config_exporter
+        parts = query.split(maxsplit=2)
+        
+        if len(parts) < 2:
+            print_error("Usage: export <filename>")
+            return True
+        
+        output_file = Path(parts[1])
+        exporter = get_config_exporter()
+        
+        if exporter.export_all(output_file):
+            print_success(f"Exported configuration to: {output_file}")
+        else:
+            print_error("Export failed")
+        return True
+    
+    elif query.startswith("import "):
+        from utils.advanced_tools import get_config_exporter
+        parts = query.split(maxsplit=2)
+        
+        if len(parts) < 2:
+            print_error("Usage: import <filename>")
+            return True
+        
+        input_file = Path(parts[1])
+        if not input_file.exists():
+            print_error(f"File not found: {input_file}")
+            return True
+        
+        exporter = get_config_exporter()
+        results = exporter.import_all(input_file)
+        
+        console.print("[cyan]Import results:[/cyan]")
+        for key, success in results.items():
+            status = "[green]✓[/green]" if success else "[red]✗[/red]"
+            console.print(f"  {status} {key}")
+        return True
+    
+    # Multi-line command builder
+    elif query == "multiline":
+        from utils.advanced_tools import multiline_builder
+        command = multiline_builder()
+        
+        if command:
+            console.print(f"\n[cyan]Executing:[/cyan] {command}\n")
+            success, output = execute_command(command)
+        return True
+    
     # Smart history
     elif query == "stats":
         smart_history.show_statistics()
