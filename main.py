@@ -278,6 +278,11 @@ def handle_special_command(query: str) -> bool:
         analyze_project()
         return True
     
+    elif query in ["describe", "describe project", "project info", "about"]:
+        from utils.project_context import show_project_description
+        show_project_description()
+        return True
+    
     # Watch mode
     elif query.startswith("watch "):
         from utils.watch_mode import watch_command

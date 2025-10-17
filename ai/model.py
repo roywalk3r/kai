@@ -23,6 +23,10 @@ def ask_ai(prompt: str) -> Dict[str, any]:
     # Update system context
     sys_context.update_cwd()
     
+    # Get project context
+    from utils.project_context import get_cached_project_context
+    project_context = get_cached_project_context()
+    
     # Build enhanced system prompt with context
     system_prompt = f"""You are Prometheus, an intelligent terminal assistant.
 Your job is to translate user requests into valid, *non-interactive* shell commands.
@@ -30,6 +34,9 @@ Your job is to translate user requests into valid, *non-interactive* shell comma
 {sys_context.get_context_string()}
 
 {conv_context.get_context_string()}
+
+PROJECT CONTEXT:
+{project_context}
 
 CRITICAL RULES:
 1. ALWAYS respond with RUN:<command> if the user wants to DO something

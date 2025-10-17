@@ -263,6 +263,8 @@ Just describe what you want to do:
 ## Context Commands
 - **status** - Show quick directory status
 - **ref/reference** - Show context-relevant commands
+- **describe** - Show intelligent project description
+- **about** - Same as describe
 
 ## AI Model Management 🆕
 - **model** - Show current AI model
