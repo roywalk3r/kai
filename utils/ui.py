@@ -318,6 +318,31 @@ Just describe what you want to do:
 - **history failed** - Show failed commands only
 - **history analysis** - Analyze usage patterns
 
+## Watch & Timing ⚡ NEW
+- **watch <command>** - Monitor command output (refreshes every 2s)
+- **watch --interval 5 <cmd>** - Custom refresh interval
+- **watch --until-change <cmd>** - Stop when output changes
+- **time <command>** - Time command execution
+- **benchmark <command> [runs]** - Run multiple times, show stats
+
+## Bookmarks 📌 NEW
+- **bookmarks** - List all directory bookmarks
+- **bookmark add <name> <path>** - Save directory bookmark
+- **bookmark remove <name>** - Remove bookmark
+- **jump <name>** - Jump to bookmarked directory
+
+## Notes 📝 NEW
+- **notes** - Show notes for current directory
+- **note "<text>"** - Add a note
+- **notes clear** - Clear all notes for directory
+- **notes search <query>** - Search all notes
+
+## Favorites ⭐ NEW
+- **favorites** - List all favorite commands
+- **favorite add <name> <command>** - Save favorite command
+- **favorite remove <name>** - Remove favorite
+- **fav <name>** - Run favorite command
+
 ## Configuration Options
 - **timeout_seconds** - Command timeout (default: 20)
 - **default_model** - AI model to use (default: llama3)

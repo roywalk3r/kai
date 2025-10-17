@@ -278,6 +278,196 @@ def handle_special_command(query: str) -> bool:
         analyze_project()
         return True
     
+    # Watch mode
+    elif query.startswith("watch "):
+        from utils.watch_mode import watch_command
+        parts = query.split(maxsplit=1)
+        if len(parts) < 2:
+            print_error("Usage: watch <command>")
+            return True
+        
+        # Parse options
+        command_part = parts[1]
+        interval = 2
+        until_change = False
+        
+        if "--interval" in command_part:
+            try:
+                parts = command_part.split("--interval")
+                interval = int(parts[1].split()[0])
+                command_part = parts[0].strip() + " ".join(parts[1].split()[1:])
+            except:
+                pass
+        
+        if "--until-change" in command_part:
+            until_change = True
+            command_part = command_part.replace("--until-change", "").strip()
+        
+        # Remove quotes if present
+        command_part = command_part.strip('"\'')
+        
+        watch_command(command_part, interval=interval, until_change=until_change)
+        return True
+    
+    # Command timing & benchmarking
+    elif query.startswith("time "):
+        from utils.watch_mode import CommandTimer
+        command = query.split(maxsplit=1)[1]
+        
+        timer = CommandTimer()
+        timer.start()
+        
+        console.print(f"[cyan]Timing: {command}[/cyan]\n")
+        success, output = execute_command(command)
+        
+        duration = timer.stop()
+        console.print(f"\n[bold]⏱️  Execution time: {timer.format_duration()}[/bold]")
+        return True
+    
+    elif query.startswith("benchmark "):
+        from utils.watch_mode import benchmark_command, show_benchmark_results
+        parts = query.split(maxsplit=2)
+        
+        if len(parts) < 2:
+            print_error("Usage: benchmark <command> [runs]")
+            return True
+        
+        command = parts[1].strip('"\'')
+        runs = int(parts[2]) if len(parts) > 2 else 5
+        
+        results = benchmark_command(command, runs)
+        show_benchmark_results(results)
+        return True
+    
+    # Bookmarks
+    elif query == "bookmarks" or query == "bookmark":
+        from utils.productivity import show_bookmarks
+        show_bookmarks()
+        return True
+    
+    elif query.startswith("bookmark add "):
+        from utils.productivity import get_bookmark_manager
+        parts = query.split(maxsplit=3)
+        if len(parts) < 4:
+            print_error("Usage: bookmark add <name> <path>")
+            return True
+        
+        name, path = parts[2], parts[3]
+        manager = get_bookmark_manager()
+        if manager.add(name, path):
+            print_success(f"Bookmark '{name}' added")
+        return True
+    
+    elif query.startswith("bookmark remove "):
+        from utils.productivity import get_bookmark_manager
+        name = query.split(maxsplit=2)[2]
+        manager = get_bookmark_manager()
+        if manager.remove(name):
+            print_success(f"Bookmark '{name}' removed")
+        else:
+            print_error(f"Bookmark '{name}' not found")
+        return True
+    
+    elif query.startswith("jump "):
+        from utils.productivity import get_bookmark_manager
+        name = query.split(maxsplit=1)[1]
+        manager = get_bookmark_manager()
+        path = manager.get(name)
+        
+        if path:
+            import os
+            try:
+                os.chdir(path)
+                print_success(f"Jumped to: {path}")
+            except Exception as e:
+                print_error(f"Could not change directory: {e}")
+        else:
+            print_error(f"Bookmark '{name}' not found")
+        return True
+    
+    # Notes
+    elif query == "notes":
+        from utils.productivity import show_notes
+        show_notes()
+        return True
+    
+    elif query.startswith("note "):
+        from utils.productivity import get_notes_manager
+        note_text = query.split(maxsplit=1)[1].strip('"\'')
+        manager = get_notes_manager()
+        manager.add(note_text)
+        print_success("Note added")
+        return True
+    
+    elif query == "notes clear":
+        from utils.productivity import get_notes_manager
+        if confirm("Clear all notes for this directory?", default=False):
+            manager = get_notes_manager()
+            manager.clear()
+            print_success("Notes cleared")
+        return True
+    
+    elif query.startswith("notes search "):
+        from utils.productivity import get_notes_manager
+        from rich.console import Console
+        query_text = query.split(maxsplit=2)[2]
+        manager = get_notes_manager()
+        results = manager.search(query_text)
+        
+        console = Console()
+        if results:
+            console.print(f"[cyan]Found {len(results)} note(s):[/cyan]\n")
+            for note in results:
+                console.print(f"[dim]{note['directory']}[/dim]")
+                console.print(f"  {note['text']}\n")
+        else:
+            console.print("[yellow]No notes found[/yellow]")
+        return True
+    
+    # Favorites
+    elif query == "favorites" or query == "fav":
+        from utils.productivity import show_favorites
+        show_favorites()
+        return True
+    
+    elif query.startswith("favorite add "):
+        from utils.productivity import get_favorites_manager
+        parts = query.split(maxsplit=3)
+        if len(parts) < 4:
+            print_error("Usage: favorite add <name> <command>")
+            return True
+        
+        name = parts[2]
+        command = parts[3].strip('"\'')
+        manager = get_favorites_manager()
+        manager.add(name, command)
+        print_success(f"Favorite '{name}' added")
+        return True
+    
+    elif query.startswith("favorite remove "):
+        from utils.productivity import get_favorites_manager
+        name = query.split(maxsplit=2)[2]
+        manager = get_favorites_manager()
+        if manager.remove(name):
+            print_success(f"Favorite '{name}' removed")
+        else:
+            print_error(f"Favorite '{name}' not found")
+        return True
+    
+    elif query.startswith("fav "):
+        from utils.productivity import get_favorites_manager
+        name = query.split(maxsplit=1)[1]
+        manager = get_favorites_manager()
+        command = manager.use(name)
+        
+        if command:
+            console.print(f"[cyan]Running favorite: {command}[/cyan]")
+            success, output = execute_command(command)
+            return True
+        else:
+            print_error(f"Favorite '{name}' not found")
+            return True
+    
     # Smart history
     elif query == "stats":
         smart_history.show_statistics()
