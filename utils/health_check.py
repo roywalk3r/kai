@@ -346,7 +346,11 @@ def run_health_check():
             status_icon = "[yellow]⚠[/yellow]"
             warnings += 1
         
-        table.add_row(name, status_icon, message)
+        # Convert message to string if it's a list
+        if isinstance(message, list):
+            message = ", ".join(str(item) for item in message)
+        
+        table.add_row(name, status_icon, str(message))
     
     console.print(table)
     
