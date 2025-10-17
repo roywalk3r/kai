@@ -110,9 +110,13 @@ class WatchMode:
     def _execute(self, command: str) -> tuple:
         """Execute command and return output."""
         try:
+            import os
+            user_shell = os.environ.get('SHELL', '/bin/bash')
+            
             result = subprocess.run(
                 command,
                 shell=True,
+                executable=user_shell,
                 capture_output=True,
                 text=True,
                 timeout=30
@@ -222,9 +226,12 @@ def benchmark_command(
             if executor_func:
                 success, output = executor_func(command)
             else:
+                import os
+                user_shell = os.environ.get('SHELL', '/bin/bash')
                 result = subprocess.run(
                     command,
                     shell=True,
+                    executable=user_shell,
                     capture_output=True,
                     text=True,
                     timeout=300

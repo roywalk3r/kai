@@ -83,11 +83,16 @@ def execute_command(cmd: str, dry_run: bool = False, interactive: bool = False) 
     stderr_output = ""
 
     try:
+        # Detect user's shell or default to bash
+        import os
+        user_shell = os.environ.get('SHELL', '/bin/bash')
+        
         # For interactive commands, don't capture output
         if interactive:
             result = subprocess.run(
                 cmd,
                 shell=True,
+                executable=user_shell,
                 text=True
             )
             return result.returncode == 0, None
@@ -96,6 +101,7 @@ def execute_command(cmd: str, dry_run: bool = False, interactive: bool = False) 
         current_process = subprocess.Popen(
             cmd,
             shell=True,
+            executable=user_shell,
             text=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,

@@ -66,7 +66,9 @@ def find_in_codebase(function_name: str, extensions: Optional[List[str]] = None)
     try:
         # Find files with matching extensions
         find_cmd = f"find . -type f \\( {ext_patterns} \\) -exec grep -l '{function_name}' {{}} +"
-        result = subprocess.run(find_cmd, shell=True, capture_output=True, text=True, timeout=10)
+        import os
+        user_shell = os.environ.get('SHELL', '/bin/bash')
+        result = subprocess.run(find_cmd, shell=True, executable=user_shell, capture_output=True, text=True, timeout=10)
         
         if result.stdout:
             files = result.stdout.strip().split('\n')
