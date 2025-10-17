@@ -409,12 +409,10 @@ def handle_special_command(query: str) -> bool:
     
     elif query.startswith("notes search "):
         from utils.productivity import get_notes_manager
-        from rich.console import Console
         query_text = query.split(maxsplit=2)[2]
         manager = get_notes_manager()
         results = manager.search(query_text)
         
-        console = Console()
         if results:
             console.print(f"[cyan]Found {len(results)} note(s):[/cyan]\n")
             for note in results:
