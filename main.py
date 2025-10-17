@@ -264,6 +264,248 @@ def handle_special_command(query: str) -> bool:
             print_error("Usage: plugin [list|install|uninstall|create] [name]")
         return True
     
+    # Alias commands
+    elif query.startswith("alias "):
+        from utils.aliases import show_aliases_table, add_alias, remove_alias, list_aliases, get_alias_manager
+        parts = query.split(maxsplit=2)
+        
+        if len(parts) < 2:
+            show_aliases_table()
+            return True
+        
+        subcommand = parts[1]
+        
+        if subcommand == "list":
+            show_aliases_table()
+        elif subcommand == "add" and len(parts) == 3:
+            # Parse: alias add name command
+            alias_parts = parts[2].split(maxsplit=1)
+            if len(alias_parts) == 2:
+                if add_alias(alias_parts[0], alias_parts[1]):
+                    print_success(f"Alias '{alias_parts[0]}' added")
+                else:
+                    print_error("Failed to add alias")
+            else:
+                print_error("Usage: alias add <name> <command>")
+        elif subcommand == "remove" and len(parts) == 3:
+            if remove_alias(parts[2]):
+                print_success(f"Alias '{parts[2]}' removed")
+            else:
+                print_error(f"Alias '{parts[2]}' not found")
+        elif subcommand == "import":
+            manager = get_alias_manager()
+            count = manager.import_from_shell("bash")
+            print_success(f"Imported {count} aliases from shell")
+        else:
+            print_error("Usage: alias [list|add|remove|import]")
+        return True
+    
+    # Cache commands
+    elif query.startswith("cache "):
+        from utils.cache import show_cache_stats, get_response_cache
+        parts = query.split()
+        
+        if len(parts) < 2:
+            show_cache_stats()
+            return True
+        
+        subcommand = parts[1]
+        
+        if subcommand == "stats":
+            show_cache_stats()
+        elif subcommand == "clear":
+            cache = get_response_cache()
+            cache.invalidate()
+            print_success("Cache cleared")
+        elif subcommand == "clean":
+            cache = get_response_cache()
+            removed = cache.clean_expired()
+            print_success(f"Removed {removed} expired entries")
+        else:
+            print_error("Usage: cache [stats|clear|clean]")
+        return True
+    
+    # Health check
+    elif query == "doctor":
+        from utils.health_check import run_health_check
+        run_health_check()
+        return True
+    
+    # Template commands
+    elif query.startswith("template "):
+        from utils.templates import show_templates, show_template_details, use_template, create_template, get_template_manager
+        parts = query.split(maxsplit=2)
+        
+        if len(parts) < 2:
+            show_templates()
+            return True
+        
+        subcommand = parts[1]
+        
+        if subcommand == "list":
+            show_templates()
+        elif subcommand == "show" and len(parts) >= 3:
+            show_template_details(parts[2])
+        elif subcommand == "use" and len(parts) >= 3:
+            # Parse parameters: template use backup source_dir=/path backup_name=mybackup
+            template_and_params = parts[2].split()
+            template_name = template_and_params[0]
+            params = {}
+            for param in template_and_params[1:]:
+                if '=' in param:
+                    key, value = param.split('=', 1)
+                    params[key] = value
+            
+            commands = use_template(template_name, params)
+            if commands:
+                console.print(f"[cyan]Executing template '{template_name}'...[/cyan]")
+                for cmd in commands:
+                    console.print(f"  [dim]$ {cmd}[/dim]")
+                    success, output = execute_command(cmd)
+                    if not success:
+                        print_error(f"Template execution failed at: {cmd}")
+                        break
+            else:
+                print_error(f"Template '{template_name}' not found")
+        else:
+            print_error("Usage: template [list|show|use] [name] [params...]")
+        return True
+    
+    # Workflow commands
+    elif query.startswith("workflow "):
+        from utils.workflows import show_workflows, show_workflow_details, get_workflow_manager, WorkflowExecutor
+        parts = query.split(maxsplit=2)
+        
+        if len(parts) < 2:
+            show_workflows()
+            return True
+        
+        subcommand = parts[1]
+        
+        if subcommand == "list":
+            show_workflows()
+        elif subcommand == "show" and len(parts) >= 3:
+            show_workflow_details(parts[2])
+        elif subcommand == "run" and len(parts) >= 3:
+            manager = get_workflow_manager()
+            workflow = manager.get_workflow(parts[2])
+            if workflow:
+                console.print(f"[cyan]Running workflow '{workflow.name}'...[/cyan]")
+                executor = WorkflowExecutor(lambda cmd, **kwargs: execute_command(cmd))
+                results = executor.execute_workflow(workflow)
+                
+                # Display results
+                for step_result in results["steps"]:
+                    if step_result.get("skipped"):
+                        console.print(f"[dim]⊘ {step_result['name']} (skipped)[/dim]")
+                    elif step_result.get("success"):
+                        console.print(f"[green]✓ {step_result['name']}[/green]")
+                    else:
+                        console.print(f"[red]✗ {step_result['name']}[/red]")
+                
+                if results["success"]:
+                    print_success("Workflow completed successfully")
+                else:
+                    print_error("Workflow failed")
+            else:
+                print_error(f"Workflow '{parts[2]}' not found")
+        else:
+            print_error("Usage: workflow [list|show|run] [name]")
+        return True
+    
+    # Remote execution commands
+    elif query.startswith("remote "):
+        from utils.remote_exec import show_remote_hosts, execute_remote_command, get_remote_executor
+        parts = query.split(maxsplit=3)
+        
+        if len(parts) < 2:
+            show_remote_hosts()
+            return True
+        
+        subcommand = parts[1]
+        
+        if subcommand == "list":
+            show_remote_hosts()
+        elif subcommand == "add" and len(parts) >= 3:
+            # Parse: remote add name user@hostname
+            executor = get_remote_executor()
+            if '@' in parts[2]:
+                user, hostname = parts[2].split('@')
+                name = parts[3] if len(parts) > 3 else hostname
+                if executor.add_host(name, hostname, user):
+                    print_success(f"Host '{name}' added")
+                else:
+                    print_error("Failed to add host")
+            else:
+                print_error("Usage: remote add <name> <user@hostname>")
+        elif subcommand == "remove" and len(parts) >= 3:
+            executor = get_remote_executor()
+            if executor.remove_host(parts[2]):
+                print_success(f"Host '{parts[2]}' removed")
+            else:
+                print_error(f"Host '{parts[2]}' not found")
+        elif subcommand == "exec" and len(parts) >= 4:
+            host_name = parts[2]
+            command = parts[3]
+            execute_remote_command(host_name, command)
+        elif subcommand == "test" and len(parts) >= 3:
+            executor = get_remote_executor()
+            success, output = executor.test_connection(parts[2])
+            if success:
+                print_success(f"Connection to '{parts[2]}' OK")
+            else:
+                print_error(f"Connection failed: {output}")
+        else:
+            print_error("Usage: remote [list|add|remove|exec|test]")
+        return True
+    
+    # Session commands
+    elif query.startswith("session "):
+        from core.session import show_session_info, get_session_context
+        parts = query.split()
+        
+        if len(parts) < 2 or parts[1] == "info":
+            show_session_info()
+        elif parts[1] == "clear":
+            session = get_session_context()
+            session.clear_context()
+            print_success("Session context cleared")
+        else:
+            print_error("Usage: session [info|clear]")
+        return True
+    
+    # Enhanced history commands
+    elif query.startswith("history "):
+        from utils.interactive_history import show_history_ui, show_history_table, show_failed_commands, show_history_analysis
+        parts = query.split()
+        
+        if len(parts) < 2:
+            show_history_table(history.get_all())
+            return True
+        
+        subcommand = parts[1]
+        
+        if subcommand == "ui":
+            result = show_history_ui(history.get_all())
+            if result:
+                action = result.get("action")
+                item = result.get("item")
+                if action == "run":
+                    # Re-execute the command
+                    console.print(f"[cyan]Running: {item['command']}[/cyan]")
+                    execute_command(item["command"])
+                elif action == "fix":
+                    print_info("Fix functionality integrated with --fix flag")
+                elif action == "explain":
+                    print_info(f"Command: {item['command']}")
+        elif subcommand == "failed":
+            show_failed_commands(history.get_all())
+        elif subcommand == "analysis" or subcommand == "analyze":
+            show_history_analysis(history.get_all())
+        else:
+            show_history_table(history.get_all())
+        return True
+    
     # Try plugin handlers
     if plugin_manager.handle_command(query.split()[0] if query else "", query.split()[1:] if len(query.split()) > 1 else []):
         return True
@@ -330,12 +572,32 @@ def main():
             if not query:
                 continue
             
+            # Expand aliases
+            from utils.aliases import expand_alias
+            original_query = query
+            query = expand_alias(query)
+            if query != original_query:
+                console.print(f"[dim]→ {query}[/dim]")
+            
             # Handle special commands
             if handle_special_command(query):
                 continue
             
-            # Ask AI to interpret the query
-            response = ask_ai(query)
+            # Check cache first
+            from utils.cache import get_response_cache
+            cache = get_response_cache()
+            cached_response = cache.get(query, str(Path.cwd()))
+            
+            if cached_response:
+                console.print("[dim]⚡ (cached response)[/dim]")
+                response = cached_response
+            else:
+                # Ask AI to interpret the query
+                response = ask_ai(query)
+                
+                # Cache the response if appropriate
+                if cache.should_cache(query):
+                    cache.set(query, response, str(Path.cwd()))
             
             # Handle different response types
             if response["intent"] == "error":
@@ -403,6 +665,17 @@ def main():
                 if not dry_run:
                     history.add(query, command, success, output)
                     conv_context.add_interaction(query, command, output)
+                    
+                    # Analyze errors and provide suggestions
+                    if not success:
+                        from utils.error_recovery import analyze_and_suggest_fix
+                        error_analysis = analyze_and_suggest_fix(command, 1, output)
+                        
+                        if error_analysis.get("suggestions"):
+                            console.print("\n[bold yellow]💡 Suggestions:[/bold yellow]")
+                            for i, suggestion in enumerate(error_analysis["suggestions"][:3], 1):
+                                console.print(f"  {i}. {suggestion}")
+                            console.print("\n[dim]Run 'prom --fix' for AI-powered fix[/dim]")
             
             else:
                 print_error(f"Unknown intent: {response['intent']}")

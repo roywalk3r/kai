@@ -276,6 +276,43 @@ Just describe what you want to do:
 - **plugin uninstall <name>** - Uninstall a plugin
 - **plugin create <name>** - Create plugin template
 
+## Alias System 🆕
+- **alias** - List all aliases
+- **alias add <name> <command>** - Create command alias
+- **alias remove <name>** - Remove alias
+- **alias import** - Import aliases from shell
+
+## Template System 🆕
+- **template list** - List available templates
+- **template show <name>** - Show template details
+- **template use <name> [params]** - Execute template
+
+## Workflow Automation 🆕
+- **workflow list** - List all workflows
+- **workflow show <name>** - Show workflow details
+- **workflow run <name>** - Execute workflow
+
+## Remote Execution 🆕
+- **remote list** - List configured hosts
+- **remote add <name> <user@host>** - Add remote host
+- **remote exec <host> <command>** - Execute on remote
+- **remote test <host>** - Test connection
+
+## Session Management 🆕
+- **session info** - Show session statistics
+- **session clear** - Clear session context
+- **doctor** - Run health check
+
+## Cache Management 🆕
+- **cache stats** - Show cache statistics
+- **cache clear** - Clear all cache
+- **cache clean** - Remove expired entries
+
+## Advanced History 🆕
+- **history ui** - Interactive history browser
+- **history failed** - Show failed commands only
+- **history analysis** - Analyze usage patterns
+
 ## Configuration Options
 - **timeout_seconds** - Command timeout (default: 20)
 - **default_model** - AI model to use (default: llama3)
